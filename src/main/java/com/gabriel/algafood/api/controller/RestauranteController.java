@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -38,44 +39,34 @@ public class RestauranteController {
     private SmartValidator validator;
 
     @GetMapping
-    public List<Restaurante> listar() {
-        return service.listar();
+    public List<RestauranteModel> listar() {
+        return toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")
     public RestauranteModel buscarPorId(@PathVariable Long id) {
-
         Restaurante restaurante = service.buscarPorId(id);
-        RestauranteModel restauranteModel = new RestauranteModel();
-        restauranteModel.setId(restaurante.getId());
-        restauranteModel.setNome(restaurante.getNome());
-        restauranteModel.setTaxaFrete(restaurante.getTaxaFrete());
-        CozinhaModelResumo cozinhaModelResumo = new CozinhaModelResumo();
-        cozinhaModelResumo.setId(restaurante.getCozinha().getId());
-        cozinhaModelResumo.setNome(restaurante.getCozinha().getNome());
-        restauranteModel.setCozinha(cozinhaModelResumo);
-        return restauranteModel;
-//        return ResponseEntity.ok(service.buscarPorId(id));
+        return toModel(restaurante);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteModel salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
-            return service.salvar(restaurante);
+            return toModel(service.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException ex) {
             throw new NegocioException(ex.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Restaurante editar(@RequestBody @Valid Restaurante restaurante, @PathVariable Long id) {
+    public RestauranteModel editar(@RequestBody @Valid Restaurante restaurante, @PathVariable Long id) {
         try {
             Restaurante restauranteAtual = service.buscarPorId(id);
             BeanUtils.copyProperties(restaurante, restauranteAtual,
                     "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-            return service.salvar(restauranteAtual);
+            return toModel(service.salvar(restauranteAtual));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -89,7 +80,7 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{id}")
-    public Restaurante atualizarParcialmente(@PathVariable Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+    public RestauranteModel atualizarParcialmente(@PathVariable Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restaurante = service.buscarPorId(id);
         merge(campos, restaurante, request);
         validate(restaurante, "restaurante");
@@ -129,6 +120,24 @@ public class RestauranteController {
             throw new ValidacaoException(bindingResult);
         }
 
+    }
+
+    private RestauranteModel toModel(Restaurante restaurante) {
+        RestauranteModel restauranteModel = new RestauranteModel();
+        restauranteModel.setId(restaurante.getId());
+        restauranteModel.setNome(restaurante.getNome());
+        restauranteModel.setTaxaFrete(restaurante.getTaxaFrete());
+        CozinhaModelResumo cozinhaModelResumo = new CozinhaModelResumo();
+        cozinhaModelResumo.setId(restaurante.getCozinha().getId());
+        cozinhaModelResumo.setNome(restaurante.getCozinha().getNome());
+        restauranteModel.setCozinha(cozinhaModelResumo);
+        return restauranteModel;
+    }
+
+    private List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
+        return restaurantes.stream()
+                .map(restaurante -> toModel(restaurante))
+                .collect(Collectors.toList());
     }
 
 
