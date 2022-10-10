@@ -1,5 +1,8 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.assembler.CozinhaAssembler;
+import com.gabriel.algafood.api.model.CozinhaModel;
+import com.gabriel.algafood.api.model.request.CozinhaRequest;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.service.CozinhaService;
 import lombok.AllArgsConstructor;
@@ -17,27 +20,31 @@ public class CozinhaController {
 
     private CozinhaService service;
 
+    private CozinhaAssembler assembler;
+
     @GetMapping
-    public List<Cozinha> listar() {
-        return service.listar();
+    public List<CozinhaModel> listar() {
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")
-    public Cozinha buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public CozinhaModel buscarPorId(@PathVariable Long id) {
+        return assembler.toModel(service.buscarPorId(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
-        return service.salvar(cozinha);
+    public CozinhaModel adicionar(@RequestBody @Valid CozinhaRequest request) {
+        Cozinha cozinha = assembler.toEntity(request);
+        return assembler.toModel(service.salvar(cozinha));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> editar(@RequestBody @Valid Cozinha cozinha, @PathVariable Long id) {
+    public CozinhaModel editar(@RequestBody @Valid CozinhaRequest request, @PathVariable Long id) {
         service.buscarPorId(id);
+        Cozinha cozinha = assembler.toEntity(request);
         cozinha.setId(id);
-        return ResponseEntity.ok(service.salvar(cozinha));
+        return assembler.toModel(service.salvar(cozinha));
     }
 
     @DeleteMapping("/{id}")

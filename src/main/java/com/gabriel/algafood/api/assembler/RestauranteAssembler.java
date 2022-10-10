@@ -30,7 +30,4 @@ public class RestauranteAssembler {
         return modelMapper.map(request, Restaurante.class);
     }
 
-    public RestauranteRequest toRequest(Restaurante restaurante) {
-        return modelMapper.map(restaurante, RestauranteRequest.class);
-    }
 }
