@@ -22,11 +22,6 @@ import java.util.Set;
 
 @Data
 @Entity
-@ValorZeroIncluiDescricao(
-        valorField = "taxaFrete",
-        descricaoField = "nome",
-        descricaoObrigatoria="Frete Grátis"
-)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Restaurante {
 
@@ -35,20 +30,10 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 3, max = 50)
     private String nome;
 
-//    @DecimalMin("0")
-//    @TaxaFrete
-//    @Multiplo(numero = 5)
-    @NotNull
-    @PositiveOrZero
     private BigDecimal taxaFrete;
 
-    @Valid
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "cozinha_id")
     private Cozinha cozinha;
