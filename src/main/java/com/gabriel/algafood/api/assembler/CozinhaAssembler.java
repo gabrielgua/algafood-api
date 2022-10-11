@@ -29,4 +29,8 @@ public class CozinhaAssembler {
     public Cozinha toEntity(CozinhaRequest request) {
         return modelMapper.map(request, Cozinha.class);
     }
+
+    public void copyToEntity (CozinhaRequest request, Cozinha cozinha) {
+        modelMapper.map(request, cozinha);
+    }
 }

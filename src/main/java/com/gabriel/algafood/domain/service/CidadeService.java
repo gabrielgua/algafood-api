@@ -7,6 +7,7 @@ import com.gabriel.algafood.domain.model.Estado;
 import com.gabriel.algafood.domain.repository.CidadeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +39,10 @@ public class CidadeService {
     @Transactional
     public void remover(Long id) {
         try {
-            buscarPorId(id);
             repository.deleteById(id);
+            repository.flush();
+        } catch (EmptyResultDataAccessException ex) {
+            throw new CidadeNaoEncontradaException(ex.getMessage());
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException("Cidade, id: #"+id+" está em uso e não pode ser removida.");
         }

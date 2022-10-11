@@ -41,9 +41,8 @@ public class CozinhaController {
 
     @PutMapping("/{id}")
     public CozinhaModel editar(@RequestBody @Valid CozinhaRequest request, @PathVariable Long id) {
-        service.buscarPorId(id);
-        Cozinha cozinha = assembler.toEntity(request);
-        cozinha.setId(id);
+        Cozinha cozinha = service.buscarPorId(id);
+        assembler.copyToEntity(request, cozinha);
         return assembler.toModel(service.salvar(cozinha));
     }
 

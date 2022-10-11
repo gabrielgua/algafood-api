@@ -1,5 +1,8 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.assembler.CidadeAssembler;
+import com.gabriel.algafood.api.model.CidadeModel;
+import com.gabriel.algafood.api.model.request.CidadeRequest;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
@@ -21,35 +24,35 @@ import java.util.List;
 public class CidadeController {
 
     private CidadeService service;
-    private EstadoService estadoService;
+    private CidadeAssembler assembler;
 
     @GetMapping
-    public List<Cidade> listar() {
-        return service.listar();
+    public List<CidadeModel> listar() {
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public CidadeModel buscarPorId(@PathVariable Long id) {
+        return assembler.toModel(service.buscarPorId(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade salvar(@RequestBody @Valid Cidade cidade) {
+    public CidadeModel salvar(@RequestBody @Valid CidadeRequest request) {
         try {
-            return service.salvar(cidade);
+            Cidade cidade = assembler.toEntity(request);
+            return assembler.toModel(service.salvar(cidade));
         } catch (EstadoNaoEncontradoException ex) {
             throw new NegocioException(ex.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Cidade editar(@RequestBody @Valid Cidade cidade, @PathVariable Long id) {
-
+    public CidadeModel editar(@RequestBody @Valid CidadeRequest request, @PathVariable Long id) {
         try {
             Cidade cidadeAtual = service.buscarPorId(id);
-            BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-            return service.salvar(cidadeAtual);
+            assembler.copyToEntity(request, cidadeAtual);
+            return assembler.toModel(service.salvar(cidadeAtual));
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }

@@ -17,11 +17,9 @@ import javax.validation.constraints.NotNull;
 public class Estado {
 
     @Id
-    @NotNull(groups = Groups.EstadoId.class)
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String nome;
 }

@@ -52,12 +52,8 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public RestauranteModel editar(@RequestBody @Valid RestauranteRequest restauranteRequest, @PathVariable Long id) {
         try {
-            Restaurante restaurante = assembler.toEntity(restauranteRequest);
-
             Restaurante restauranteAtual = service.buscarPorId(id);
-            BeanUtils.copyProperties(restaurante, restauranteAtual,
-                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-
+            assembler.copyToEntity(restauranteRequest, restauranteAtual);
             return assembler.toModel(service.salvar(restauranteAtual));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);

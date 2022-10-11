@@ -2,6 +2,7 @@ package com.gabriel.algafood.api.assembler;
 
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
+import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class RestauranteAssembler {
 
     public Restaurante toEntity(RestauranteRequest request) {
         return modelMapper.map(request, Restaurante.class);
+    }
+
+    public void copyToEntity(RestauranteRequest request, Restaurante restaurante) {
+        // Para evitar Exception do JPA org.hibernate.HibernateException: Tried to change the Identifier of an instance...
+        restaurante.setCozinha(new Cozinha());
+        modelMapper.map(request, restaurante);
     }
 
 }

@@ -7,6 +7,7 @@ import com.gabriel.algafood.domain.model.Estado;
 import com.gabriel.algafood.domain.repository.EstadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +37,10 @@ public class EstadoService {
     @Transactional
     public void remover(Long id) {
         try {
-            buscarPorId(id);
             repository.deleteById(id);
+            repository.flush();
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EstadoNaoEncontradoException(ex.getMessage());
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException("Estado, id: #"+id+" está em uso e não pode ser removido.");
         }

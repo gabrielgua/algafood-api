@@ -8,6 +8,7 @@ import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +42,10 @@ public class RestauranteService {
     @Transactional
     public void remover(Long id) {
         try {
-            buscarPorId(id);
             repository.deleteById(id);
+            repository.flush();
+        } catch (EmptyResultDataAccessException ex) {
+            throw new RestauranteNaoEncontradoException(ex.getMessage());
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException("Restaurante id: #"+id+" está em uso e não pode ser removido.");
         }

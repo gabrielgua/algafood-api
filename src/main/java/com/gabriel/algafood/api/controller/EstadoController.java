@@ -1,5 +1,8 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.assembler.EstadoAssembler;
+import com.gabriel.algafood.api.model.EstadoModel;
+import com.gabriel.algafood.api.model.request.EstadoRequest;
 import com.gabriel.algafood.domain.model.Estado;
 import com.gabriel.algafood.domain.repository.EstadoRepository;
 import com.gabriel.algafood.domain.service.EstadoService;
@@ -16,27 +19,29 @@ import java.util.List;
 public class EstadoController {
 
     private EstadoService service;
+    private EstadoAssembler assembler;
 
     @GetMapping
-    public List<Estado> listar() {
-        return service.listar();
+    public List<EstadoModel> listar() {
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public EstadoModel buscarPorId(@PathVariable Long id) {
+        return assembler.toModel(service.buscarPorId(id));
     }
 
     @PostMapping
-    public Estado salvar(@RequestBody @Valid Estado estado) {
-        return service.salvar(estado);
+    public EstadoModel salvar(@RequestBody @Valid EstadoRequest request) {
+        Estado estado = assembler.toEntity(request);
+        return assembler.toModel(service.salvar(estado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estado> editar(@RequestBody @Valid Estado estado, @PathVariable Long id) {
-        service.buscarPorId(id);
-        estado.setId(id);
-        return ResponseEntity.ok(service.salvar(estado));
+    public EstadoModel editar(@RequestBody @Valid EstadoRequest request, @PathVariable Long id) {
+        Estado estado = service.buscarPorId(id);
+        assembler.copyToEntity(request, estado);
+        return assembler.toModel(service.salvar(estado));
     }
 
     @DeleteMapping("/{id}")
