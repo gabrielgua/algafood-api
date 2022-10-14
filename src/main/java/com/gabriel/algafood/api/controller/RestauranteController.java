@@ -3,7 +3,7 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.assembler.RestauranteAssembler;
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
-import com.gabriel.algafood.core.validation.service.RestauranteService;
+import com.gabriel.algafood.domain.service.RestauranteService;
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;

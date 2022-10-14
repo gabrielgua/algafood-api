@@ -4,7 +4,7 @@ import com.gabriel.algafood.api.assembler.CozinhaAssembler;
 import com.gabriel.algafood.api.model.CozinhaModel;
 import com.gabriel.algafood.api.model.request.CozinhaRequest;
 import com.gabriel.algafood.domain.model.Cozinha;
-import com.gabriel.algafood.core.validation.service.CozinhaService;
+import com.gabriel.algafood.domain.service.CozinhaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

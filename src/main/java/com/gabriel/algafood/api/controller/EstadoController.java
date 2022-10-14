@@ -4,7 +4,7 @@ import com.gabriel.algafood.api.assembler.EstadoAssembler;
 import com.gabriel.algafood.api.model.EstadoModel;
 import com.gabriel.algafood.api.model.request.EstadoRequest;
 import com.gabriel.algafood.domain.model.Estado;
-import com.gabriel.algafood.core.validation.service.EstadoService;
+import com.gabriel.algafood.domain.service.EstadoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -3,7 +3,7 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.model.request.FormaPagamentoRequest;
-import com.gabriel.algafood.core.validation.service.FormaPagamentoService;
+import com.gabriel.algafood.domain.service.FormaPagamentoService;
 import com.gabriel.algafood.domain.model.FormaPagamento;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

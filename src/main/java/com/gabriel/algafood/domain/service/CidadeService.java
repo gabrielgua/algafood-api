@@ -1,4 +1,4 @@
-package com.gabriel.algafood.core.validation.service;
+package com.gabriel.algafood.domain.service;
 
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.EntidadeEmUsoException;

@@ -6,7 +6,7 @@ import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.repository.CozinhaRepository;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
-import com.gabriel.algafood.core.validation.service.CozinhaService;
+import com.gabriel.algafood.domain.service.CozinhaService;
 import com.gabriel.algafood.util.DatabaseCleaner;
 import com.gabriel.algafood.util.ResourceUtils;
 import io.restassured.RestAssured;

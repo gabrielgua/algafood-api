@@ -18,10 +18,8 @@ public class Grupo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String nome;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "grupo_permissao",
         joinColumns = @JoinColumn(name = "grupo_id"),

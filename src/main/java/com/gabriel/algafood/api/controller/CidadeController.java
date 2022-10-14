@@ -6,7 +6,7 @@ import com.gabriel.algafood.api.model.request.CidadeRequest;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
-import com.gabriel.algafood.core.validation.service.CidadeService;
+import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
