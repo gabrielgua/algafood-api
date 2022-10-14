@@ -9,12 +9,18 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CidadeRequest {
+public class EnderecoRequest {
 
     @NotBlank
-    private String nome;
-
+    private String cep;
+    @NotBlank
+    private String numero;
+    @NotBlank
+    private String logradouro;
+    private String complemento;
+    @NotBlank
+    private String bairro;
     @Valid
     @NotNull
-    private EstadoIdRequest estado;
+    private CidadeIdRequest cidade;
 }

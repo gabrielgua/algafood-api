@@ -2,6 +2,7 @@ package com.gabriel.algafood.api.assembler;
 
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
+import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
@@ -34,6 +35,11 @@ public class RestauranteAssembler {
     public void copyToEntity(RestauranteRequest request, Restaurante restaurante) {
         // Para evitar Exception do JPA org.hibernate.HibernateException: Tried to change the Identifier of an instance...
         restaurante.setCozinha(new Cozinha());
+
+        if (restaurante.getEndereco() != null) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
+
         modelMapper.map(request, restaurante);
     }
 

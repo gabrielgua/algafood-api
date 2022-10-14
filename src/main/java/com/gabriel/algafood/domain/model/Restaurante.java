@@ -33,6 +33,8 @@ public class Restaurante {
     private String nome;
     private BigDecimal taxaFrete;
 
+    private Boolean ativo = Boolean.TRUE;
+
     @ManyToOne
     @JoinColumn(name = "cozinha_id")
     private Cozinha cozinha;
@@ -56,5 +58,17 @@ public class Restaurante {
         joinColumns = @JoinColumn(name = "restaurante_id"),
         inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private Set<FormaPagamento> formasPagamento = new HashSet<>();
+
+    public void ativar() {
+        setAtivo(true);
+    }
+
+    public void inativar() {
+        setAtivo(false);
+    }
+
+    public void ativarOuInativar() {
+        setAtivo(!getAtivo());
+    }
 
 }

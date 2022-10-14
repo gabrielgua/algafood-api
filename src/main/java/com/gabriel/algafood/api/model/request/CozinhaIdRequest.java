@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class EstadoRequestId {
+public class CozinhaIdRequest {
 
     @NotNull
     private Long id;
