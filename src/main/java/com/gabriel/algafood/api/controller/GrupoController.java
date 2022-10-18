@@ -6,6 +6,7 @@ import com.gabriel.algafood.api.model.request.GrupoRequest;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ public class GrupoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GrupoModel salvar(@RequestBody @Valid GrupoRequest request) {
         Grupo grupo = assembler.toEntity(request);
         return assembler.toModel(service.salvar(grupo));

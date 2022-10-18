@@ -6,6 +6,7 @@ import com.gabriel.algafood.api.model.request.EstadoRequest;
 import com.gabriel.algafood.domain.model.Estado;
 import com.gabriel.algafood.domain.service.EstadoService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class EstadoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EstadoModel salvar(@RequestBody @Valid EstadoRequest request) {
         Estado estado = assembler.toEntity(request);
         return assembler.toModel(service.salvar(estado));

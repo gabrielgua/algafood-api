@@ -8,6 +8,7 @@ import com.gabriel.algafood.api.model.request.UsuarioRequest;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.service.UsuarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel salvar(@RequestBody @Valid UsuarioComSenhaRequest request) {
         Usuario usuario = assembler.toEntity(request);
         return assembler.toModel(service.salvar(usuario));
