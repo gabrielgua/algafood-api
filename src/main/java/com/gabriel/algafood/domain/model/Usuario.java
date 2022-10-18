@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,23 +1,16 @@
 package com.gabriel.algafood.domain.model;
 
-import com.gabriel.algafood.core.validation.Groups;
-import com.gabriel.algafood.core.validation.annotations.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -51,7 +44,7 @@ public class Restaurante {
     private OffsetDateTime dataAtualizacao;
 
     @OneToMany(mappedBy = "restaurante")
-    private Set<Produto> produtos = new HashSet<>();
+    private List<Produto> produtos = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento",
@@ -71,4 +64,11 @@ public class Restaurante {
         setAtivo(!getAtivo());
     }
 
+    public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().add(formaPagamento);
+    }
+
+    public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().remove(formaPagamento);
+    }
 }

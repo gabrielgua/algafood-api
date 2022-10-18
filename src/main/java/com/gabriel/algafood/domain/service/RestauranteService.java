@@ -4,6 +4,7 @@ import com.gabriel.algafood.domain.exception.EntidadeEmUsoException;
 import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.model.Cozinha;
+import com.gabriel.algafood.domain.model.FormaPagamento;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class RestauranteService {
     private RestauranteRepository repository;
     private CozinhaService cozinhaService;
     private CidadeService cidadeService;
+    private FormaPagamentoService formaPagamentoService;
 
     @Transactional(readOnly = true)
     public List<Restaurante> listar() {
@@ -74,6 +76,22 @@ public class RestauranteService {
         Restaurante restaurante = buscarPorId(id);
         restaurante.ativarOuInativar();
         return restaurante;
+    }
+
+    @Transactional
+    public void desvincularFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarPorId(formaPagamentoId);
+
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void vincularFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarPorId(formaPagamentoId);
+
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
 }

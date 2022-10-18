@@ -24,7 +24,7 @@ public class FormaPagamentoController {
 
     @GetMapping
     public List<FormaPagamentoModel> listar() {
-        return assembler.toCollectionList(service.listar());
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -15,7 +16,6 @@ import java.util.List;
 public class UsuarioService {
 
     private UsuarioRepository repository;
-
 
     public List<Usuario> listar() {
         return repository.findAll();
@@ -27,6 +27,12 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
+        repository.detach(usuario);
+        var usuarioExistente = repository.findByEmail(usuario.getEmail());
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+            throw new NegocioException(String.format("Já existe um usuário cadastrado com o email: %s", usuario.getEmail()));
+        }
+
         return repository.save(usuario);
     }
 
