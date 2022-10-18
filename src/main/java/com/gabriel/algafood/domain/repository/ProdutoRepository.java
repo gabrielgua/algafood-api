@@ -16,6 +16,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("from Produto p where restaurante.id = :restaurante and id = :produto")
     Optional<Produto> findById(@Param("restaurante") Long restauranteId, @Param("produto") Long produtoId);
-
     List<Produto> findByRestaurante(Restaurante restaurante);
+    List<Produto> findByRestauranteAndAtivo(Restaurante restaurante, Boolean ativo);
 }

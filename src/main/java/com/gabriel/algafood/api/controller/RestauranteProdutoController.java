@@ -53,6 +53,28 @@ public class RestauranteProdutoController {
         return assembler.toModel(produtoService.salvar(produto));
     }
 
+    @PutMapping("/{produtoId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarOuInativar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        var restaurante = restauranteService.buscarPorId(restauranteId);
+        produtoService.ativarOuInativar(restaurante.getId(), produtoId);
+    }
+
+    @GetMapping(params = "ativos")
+    public List<ProdutoModel> listarAtivos(@PathVariable Long restauranteId) {
+        var restaurante = restauranteService.buscarPorId(restauranteId);
+        List<Produto> produtosAtivos = produtoService.listar(restaurante, true);
+        return assembler.toCollectionModel(produtosAtivos);
+    }
+
+    @GetMapping(params = "inativos")
+    public List<ProdutoModel> listarInativos(@PathVariable Long restauranteId) {
+        var restaurante = restauranteService.buscarPorId(restauranteId);
+        List<Produto> produtosInativos = produtoService.listar(restaurante, false);
+        return assembler.toCollectionModel(produtosInativos);
+    }
+
+
 }
 
 

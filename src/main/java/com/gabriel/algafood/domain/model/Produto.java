@@ -28,6 +28,9 @@ public class Produto {
     @ManyToOne
     private Restaurante restaurante;
 
+    public void ativoOuInativo() {
+        setAtivo(!getAtivo());
+    }
 
 
 }
