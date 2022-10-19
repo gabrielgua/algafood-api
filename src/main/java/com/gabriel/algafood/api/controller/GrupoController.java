@@ -22,7 +22,7 @@ public class GrupoController {
 
     @GetMapping
     public List<GrupoModel> listar() {
-        return assembler.toCollectionList(service.listar());
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")

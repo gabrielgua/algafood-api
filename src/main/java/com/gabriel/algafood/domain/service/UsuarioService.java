@@ -2,6 +2,7 @@ package com.gabriel.algafood.domain.service;
 
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.exception.UsuarioNaoEncontradoException;
+import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UsuarioService {
 
     private UsuarioRepository repository;
+    private GrupoService grupoService;
 
     public List<Usuario> listar() {
         return repository.findAll();
@@ -50,4 +52,19 @@ public class UsuarioService {
         }
         usuario.setSenha(senhaNova);
     }
+
+    @Transactional
+    public void vincularGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarPorId(grupoId);
+        usuario.vincularGrupo(grupo);
+    }
+
+    @Transactional
+    public void desvincularGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarPorId(grupoId);
+        usuario.desvincularGrupo(grupo);
+    }
+
 }
