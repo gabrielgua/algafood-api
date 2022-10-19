@@ -2,6 +2,7 @@ package com.gabriel.algafood.domain.service;
 
 import com.gabriel.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Grupo;
+import com.gabriel.algafood.domain.model.Permissao;
 import com.gabriel.algafood.domain.repository.GrupoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import java.util.List;
 public class GrupoService {
 
     private GrupoRepository repository;
+    private PermissaoService permissaoService;
+
 
     public List<Grupo> listar() {
         return repository.findAll();
@@ -33,4 +36,20 @@ public class GrupoService {
         Grupo grupo = buscarPorId(id);
         repository.delete(grupo);
     }
+
+    @Transactional
+    public void vincularPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarPorId(grupoId);
+        Permissao permissao = permissaoService.buscarPorId(permissaoId);
+        grupo.vincularPermissao(permissao);
+    }
+
+    @Transactional
+    public void desvincularPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarPorId(grupoId);
+        Permissao permissao = permissaoService.buscarPorId(permissaoId);
+        grupo.desvincularPermissao(permissao);
+    }
+
+
 }
