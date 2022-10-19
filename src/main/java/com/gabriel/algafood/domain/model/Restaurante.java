@@ -27,6 +27,7 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
     private Boolean ativo = Boolean.TRUE;
+    private Boolean aberto = true;
 
     @ManyToOne
     @JoinColumn(name = "cozinha_id")
