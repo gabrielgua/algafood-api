@@ -84,6 +84,26 @@ public class RestauranteController {
         return assembler.toModel(service.ativarOuInativar(id));
     }
 
+    @PutMapping("/{id}/abertura")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrirRestaurante(@PathVariable Long id) {
+        service.abrirRestaurante(id);
+    }
+
+    @PutMapping("/{id}/fechamento")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void fecharRestaurante(@PathVariable Long id) {
+        service.fecharRestaurante(id);
+    }
+
+    @PutMapping("/{id}/abertura-ou-fechamento")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrirOuFecharRestaurante(@PathVariable Long id) {
+        service.abrirOuFecharRestaurante(id);
+    }
+
+
+
 
 
 
