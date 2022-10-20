@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -17,8 +17,8 @@ public class ItemPedido {
     private Long id;
 
     private Integer quantidade;
-    private BigInteger precoUnitario;
-    private BigInteger precoTotal;
+    private BigDecimal precoUnitario;
+    private BigDecimal precoTotal;
     private String observacao;
 
     @ManyToOne

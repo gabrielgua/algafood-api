@@ -1,0 +1,1 @@
+alter table pedido rename column date_entrega to data_entrega;
