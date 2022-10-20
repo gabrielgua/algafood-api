@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.model.UsuarioModel;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class RestauranteUsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.vincularResponsavel(restauranteId, usuarioId);
     }
 
     @DeleteMapping("/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desvincularResponsavel(restauranteId, usuarioId);
     }

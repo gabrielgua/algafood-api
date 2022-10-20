@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.assembler.RestauranteAssembler;
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
+import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -77,6 +78,26 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativar(@PathVariable Long id) {
         service.inativar(id);
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            service.ativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
+        }
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void invativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            service.inativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
+        }
     }
 
     @PutMapping("/{id}/ativo-ou-inativo")
