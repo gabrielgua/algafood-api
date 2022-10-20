@@ -25,4 +25,5 @@ public class PermissaoAssembler {
                 .map(permissao -> toModel(permissao))
                 .collect(Collectors.toList());
     }
+
 }

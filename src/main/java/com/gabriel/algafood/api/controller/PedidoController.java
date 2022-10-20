@@ -2,13 +2,17 @@ package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.PedidoAssembler;
 import com.gabriel.algafood.api.model.PedidoModel;
+import com.gabriel.algafood.api.model.PedidoResumoModel;
+import com.gabriel.algafood.api.model.request.PedidoRequest;
+import com.gabriel.algafood.domain.exception.*;
+import com.gabriel.algafood.domain.model.Pedido;
+import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.service.PedidoService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,12 +24,28 @@ public class PedidoController {
     private PedidoAssembler assembler;
 
     @GetMapping
-    public List<PedidoModel> listar() {
-        return assembler.toCollectionModel(service.listar());
+    public List<PedidoResumoModel> listar() {
+        return assembler.toCollectionResumoModel(service.listar());
     }
 
     @GetMapping("/{id}")
     public PedidoModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PedidoModel salvar(@RequestBody @Valid PedidoRequest request) {
+        try {
+            Pedido pedido = assembler.toEntity(request);
+
+            //usuario autenticado implementar
+            pedido.setCliente(new Usuario());
+            pedido.getCliente().setId(1L);
+
+            return assembler.toModel(service.salvar(pedido));
+        } catch (EntidadeNaoEncontradaException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
+        }
     }
 }
