@@ -2,10 +2,7 @@ package com.gabriel.algafood.domain.service;
 
 import com.gabriel.algafood.domain.exception.EntidadeEmUsoException;
 import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
-import com.gabriel.algafood.domain.model.Cidade;
-import com.gabriel.algafood.domain.model.Cozinha;
-import com.gabriel.algafood.domain.model.FormaPagamento;
-import com.gabriel.algafood.domain.model.Restaurante;
+import com.gabriel.algafood.domain.model.*;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +20,7 @@ public class RestauranteService {
     private CozinhaService cozinhaService;
     private CidadeService cidadeService;
     private FormaPagamentoService formaPagamentoService;
+    private UsuarioService usuarioService;
 
     @Transactional(readOnly = true)
     public List<Restaurante> listar() {
@@ -110,6 +108,22 @@ public class RestauranteService {
     public void abrirOuFecharRestaurante(Long restauranteId) {
         Restaurante restaurante = buscarPorId(restauranteId);
         restaurante.abrirOuFechar();
+    }
+
+    @Transactional
+    public void vincularResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+
+        restaurante.vincularResponsavel(usuario);
+    }
+
+    @Transactional
+    public void desvincularResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+
+        restaurante.desvincularResponsavel(usuario);
     }
 
 

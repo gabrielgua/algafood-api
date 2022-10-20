@@ -24,7 +24,7 @@ public class UsuarioController {
 
     @GetMapping
     public List<UsuarioModel> listar() {
-        return assembler.toCollectionList(service.listar());
+        return assembler.toCollectionModel(service.listar());
     }
 
     @GetMapping("/{id}")
