@@ -29,8 +29,8 @@ public class PedidoService {
         return repository.findAll();
     }
 
-    public Pedido buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
+    public Pedido buscarPorId(String codigoPedido) {
+        return repository.findByCodigo(codigoPedido).orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
     }
 
     @Transactional

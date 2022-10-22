@@ -7,26 +7,26 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/pedidos/{pedidoId}")
+@RequestMapping("/pedidos/{codigoPedido}")
 public class StatusPedidoController {
 
     private StatusPedidoService statusService;
 
     @PutMapping("/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmarPedido(@PathVariable Long pedidoId) {
-        statusService.confirmar(pedidoId);
+    public void confirmarPedido(@PathVariable String codigoPedido) {
+        statusService.confirmar(codigoPedido);
     }
 
     @PutMapping("/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelarPedido(@PathVariable Long pedidoId) {
-        statusService.cancelar(pedidoId);
+    public void cancelarPedido(@PathVariable String codigoPedido) {
+        statusService.cancelar(codigoPedido);
     }
 
     @PutMapping("/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmarEntrega(@PathVariable Long pedidoId) {
-        statusService.confirmarEntrega(pedidoId);
+    public void confirmarEntrega(@PathVariable String codigoPedido) {
+        statusService.confirmarEntrega(codigoPedido);
     }
 }

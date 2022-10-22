@@ -28,9 +28,9 @@ public class PedidoController {
         return assembler.toCollectionResumoModel(service.listar());
     }
 
-    @GetMapping("/{id}")
-    public PedidoModel buscarPorId(@PathVariable Long id) {
-        return assembler.toModel(service.buscarPorId(id));
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel buscarPorId(@PathVariable String codigoPedido) {
+        return assembler.toModel(service.buscarPorId(codigoPedido));
     }
 
     @PostMapping
