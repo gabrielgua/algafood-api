@@ -1,8 +1,10 @@
 package com.gabriel.algafood.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.gabriel.algafood.api.assembler.RestauranteAssembler;
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
+import com.gabriel.algafood.api.model.view.RestauranteView;
 import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
@@ -12,6 +14,7 @@ import com.gabriel.algafood.domain.model.Restaurante;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +32,41 @@ public class RestauranteController {
     private RestauranteAssembler assembler;
 
     @GetMapping
+    @JsonView(RestauranteView.Resumo.class)
     public List<RestauranteModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
+
+    @GetMapping(params = "view=nome")
+    @JsonView(RestauranteView.ApenasNome.class)
+    public List<RestauranteModel> listarApenasNome() {
+        return listar();
+    }
+
+//    @GetMapping
+//    public MappingJacksonValue listar(@RequestParam(required = false) String view) {
+//        var restaurantes = service.listar();
+//        var restauranteModel = assembler.toCollectionModel(restaurantes);
+//
+//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(restauranteModel);
+//
+//        pedidosWrapper.setSerializationView(RestauranteView.Resumo.class);
+//
+//        if ("nome".equals(view)) {
+//            pedidosWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+//        } else if ("completo".equals(view)) {
+//            pedidosWrapper.setSerializationView(null);
+//        }
+//
+//        return pedidosWrapper;
+//    }
+
+//    @GetMapping
+//    public List<RestauranteModel> listar() {
+//        return assembler.toCollectionModel(service.listar());
+//    }
+
+
 
     @GetMapping("/{id}")
     public RestauranteModel buscarPorId(@PathVariable Long id) {

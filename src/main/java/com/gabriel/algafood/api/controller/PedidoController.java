@@ -4,7 +4,8 @@ import com.gabriel.algafood.api.assembler.PedidoAssembler;
 import com.gabriel.algafood.api.model.PedidoModel;
 import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.model.request.PedidoRequest;
-import com.gabriel.algafood.domain.exception.*;
+import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Pedido;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.service.PedidoService;
@@ -48,4 +49,22 @@ public class PedidoController {
             throw new NegocioException(ex.getMessage(), ex);
         }
     }
+
+    //  filtrar consulta por campos com MappingJacksonValue
+    //    @GetMapping
+//        public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
+//        var pedidos = service.listar();
+//        var pedidosModel = assembler.toCollectionResumoModel(pedidos);
+//
+//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosModel);
+//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+//
+//        if (StringUtils.isNotBlank(campos)) {
+//            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+//        }
+//
+//        pedidosWrapper.setFilters(filterProvider);
+//        return pedidosWrapper;
+//    }
 }
