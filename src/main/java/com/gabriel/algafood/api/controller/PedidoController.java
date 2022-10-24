@@ -9,7 +9,7 @@ import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Pedido;
 import com.gabriel.algafood.domain.model.Usuario;
-import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
+import com.gabriel.algafood.domain.filter.PedidoFilter;
 import com.gabriel.algafood.domain.service.PedidoService;
 import com.google.common.collect.ImmutableMap;
 import lombok.AllArgsConstructor;

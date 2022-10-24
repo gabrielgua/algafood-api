@@ -1,7 +1,7 @@
 package com.gabriel.algafood.infrastructure.spec;
 
 import com.gabriel.algafood.domain.model.Pedido;
-import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
+import com.gabriel.algafood.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;

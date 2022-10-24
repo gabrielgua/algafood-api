@@ -5,17 +5,14 @@ import com.gabriel.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Pedido;
 
 import com.gabriel.algafood.domain.model.Produto;
-import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.repository.PedidoRepository;
-import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
+import com.gabriel.algafood.domain.filter.PedidoFilter;
 import com.gabriel.algafood.infrastructure.spec.PedidoSpecs;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
