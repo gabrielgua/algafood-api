@@ -7,6 +7,9 @@ import com.gabriel.algafood.domain.repository.CozinhaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +21,8 @@ public class CozinhaService {
 
     private CozinhaRepository repository;
 
-    public List<Cozinha> listar() {
-        return repository.findAll();
+    public Page<Cozinha> listar(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Cozinha buscarPorId(Long id) {

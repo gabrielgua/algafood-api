@@ -11,6 +11,10 @@ import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
 import com.gabriel.algafood.domain.service.PedidoService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +30,12 @@ public class PedidoController {
     private PedidoAssembler assembler;
 
     @GetMapping
-    public List<PedidoResumoModel> pesquisar(PedidoFilter filter) {
-        return assembler.toCollectionResumoModel(service.listar(filter));
+    public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
+        Page<Pedido> pedidos = service.listar(filter, pageable);
+        List<PedidoResumoModel> pedidosResumoModel = assembler.toCollectionResumoModel(pedidos.getContent());
+        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidos.getTotalElements());
+
+        return pedidosResumoModelPage;
     }
 
     @GetMapping("/{codigoPedido}")

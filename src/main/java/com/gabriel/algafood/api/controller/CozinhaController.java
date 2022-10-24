@@ -6,6 +6,10 @@ import com.gabriel.algafood.api.model.request.CozinhaRequest;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.service.CozinhaService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +26,11 @@ public class CozinhaController {
     private CozinhaAssembler assembler;
 
     @GetMapping
-    public List<CozinhaModel> listar() {
-        return assembler.toCollectionModel(service.listar());
+    public Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+        Page<Cozinha> cozinhasPage = service.listar(pageable);
+        List<CozinhaModel> cozinhasModel = assembler.toCollectionModel(cozinhasPage.getContent());
+        Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
+        return cozinhasModelPage;
     }
 
     @GetMapping("/{id}")

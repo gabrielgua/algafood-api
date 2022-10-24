@@ -10,6 +10,8 @@ import com.gabriel.algafood.domain.repository.PedidoRepository;
 import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
 import com.gabriel.algafood.infrastructure.spec.PedidoSpecs;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,8 @@ public class PedidoService {
     private UsuarioService usuarioService;
     private CidadeService cidadeService;
 
-    public List<Pedido> listar(PedidoFilter filter) {
-        return repository.findAll(PedidoSpecs.usandoFiltro(filter));
+    public Page<Pedido> listar(PedidoFilter filter, Pageable pageable) {
+        return repository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
     }
 
     public Pedido buscarPorId(String codigoPedido) {
