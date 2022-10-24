@@ -4,12 +4,14 @@ import com.gabriel.algafood.api.assembler.PedidoAssembler;
 import com.gabriel.algafood.api.model.PedidoModel;
 import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.model.request.PedidoRequest;
+import com.gabriel.algafood.core.data.PageableTranslator;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Pedido;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
 import com.gabriel.algafood.domain.service.PedidoService;
+import com.google.common.collect.ImmutableMap;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +33,8 @@ public class PedidoController {
 
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
+        pageable = traduzirPageable(pageable);
+
         Page<Pedido> pedidos = service.listar(filter, pageable);
         List<PedidoResumoModel> pedidosResumoModel = assembler.toCollectionResumoModel(pedidos.getContent());
         Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidos.getTotalElements());
@@ -57,6 +61,18 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException ex) {
             throw new NegocioException(ex.getMessage(), ex);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = ImmutableMap.of(
+                "codigo", "codigo",
+                "subtotal", "subtotal",
+                "restaurante.nome", "restaurante.nome",
+                "cliente.nome", "cliente.nome",
+                "valorTotal", "valorTotal"
+        );
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 
     //  filtrar consulta por campos com MappingJacksonValue

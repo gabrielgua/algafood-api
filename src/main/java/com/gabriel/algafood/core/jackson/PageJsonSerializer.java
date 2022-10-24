@@ -22,10 +22,6 @@ public class PageJsonSerializer extends JsonSerializer<Page<?>> {
         gen.writeNumberField("totalElements", value.getTotalElements());
         gen.writeNumberField("page", value.getNumber());
 
-
-
-
-
         gen.writeEndObject();
     }
 }
