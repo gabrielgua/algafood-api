@@ -8,6 +8,7 @@ import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Pedido;
 import com.gabriel.algafood.domain.model.Usuario;
+import com.gabriel.algafood.domain.repository.filter.PedidoFilter;
 import com.gabriel.algafood.domain.service.PedidoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class PedidoController {
     private PedidoAssembler assembler;
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        return assembler.toCollectionResumoModel(service.listar());
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filter) {
+        return assembler.toCollectionResumoModel(service.listar(filter));
     }
 
     @GetMapping("/{codigoPedido}")
