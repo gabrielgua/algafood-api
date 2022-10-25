@@ -1,4 +1,4 @@
-package com.gabriel.algafood.infrastructure.service;
+package com.gabriel.algafood.infrastructure.service.query;
 
 import com.gabriel.algafood.domain.filter.VendaDiariaFilter;
 import com.gabriel.algafood.domain.model.Pedido;
