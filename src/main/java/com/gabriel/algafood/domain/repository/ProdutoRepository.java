@@ -1,5 +1,6 @@
 package com.gabriel.algafood.domain.repository;
 
+import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.model.Produto;
 import com.gabriel.algafood.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>, Produto
     Optional<Produto> findById(@Param("restaurante") Long restauranteId, @Param("produto") Long produtoId);
     List<Produto> findByRestaurante(Restaurante restaurante);
     List<Produto> findByRestauranteAndAtivo(Restaurante restaurante, Boolean ativo);
+
+    @Query("SELECT f FROM FotoProduto f JOIN f.produto p WHERE p.restaurante.id = :restauranteId AND f.produto.id = :produtoId")
+    Optional<FotoProduto> findFotoById(Long restauranteId, Long produtoId);
 }
