@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.model.FotoProdutoModel;
 import com.gabriel.algafood.api.model.request.FotoProdutoRequest;
 import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.service.FotoProdutoService;
+import com.gabriel.algafood.domain.service.FotoStorageService;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class RestauranteProdutoFotoController {
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(
-            @PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) {
+            @PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) throws IOException {
 
         var produto = produtoService.buscarPorId(restauranteId, produtoId);
         var foto = new FotoProduto();
@@ -38,6 +40,6 @@ public class RestauranteProdutoFotoController {
         foto.setContentType(arquivo.getContentType());
         foto.setNomeArquivo(arquivo.getOriginalFilename());
 
-        return assembler.toModel(fotoProdutoService.salvar(foto));
+        return assembler.toModel(fotoProdutoService.salvar(foto, arquivo.getInputStream()));
     }
 }

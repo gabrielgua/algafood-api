@@ -17,12 +17,11 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
 
     @Override
     public void armazenar(NovaFoto novaFoto) {
+        System.out.println(diretorioFoto);
         Path arquivoPath = getArquivoPath(novaFoto.getNomeArquivo());
 
         try {
             FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
-
-
         } catch (Exception ex) {
             throw new StorageException("Não foi possível armazenar o arquivo", ex);
         }
