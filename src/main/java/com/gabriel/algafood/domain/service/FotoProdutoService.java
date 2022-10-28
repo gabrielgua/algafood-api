@@ -52,4 +52,11 @@ public class FotoProdutoService {
         return produtoRepository.findFotoById(produtoId, restauranteId).orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
     }
 
+    @Transactional
+    public void remover(Long restauranteId, Long produtoId) {
+        var fotoProduto = buscarPorId(restauranteId, produtoId);
+        produtoRepository.delete(fotoProduto);
+        fotoStorageService.remover(fotoProduto.getNomeArquivo());
+    }
+
 }

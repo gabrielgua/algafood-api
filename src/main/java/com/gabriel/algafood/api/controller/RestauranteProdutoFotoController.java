@@ -12,11 +12,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static org.springframework.http.MediaType.*;
 
@@ -36,13 +38,20 @@ public class RestauranteProdutoFotoController {
         return assembler.toModel(fotoProduto);
     }
 
-    @GetMapping(produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
-    public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+    @GetMapping
+    public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
+                                                          @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
         try {
             var fotoProduto = fotoProdutoService.buscarPorId(restauranteId, produtoId);
-            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
-            return ResponseEntity.ok().contentType(IMAGE_JPEG).body(new InputStreamResource(inputStream));
 
+            var mediaTypeFoto = parseMediaType(fotoProduto.getContentType());
+            List<MediaType> mediaTypesAceitas = parseMediaTypes(acceptHeader);
+
+            verificarCompatibilidadeMediaType(mediaTypeFoto, mediaTypesAceitas);
+
+            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+
+            return ResponseEntity.ok().contentType(mediaTypeFoto).body(new InputStreamResource(inputStream));
         } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
         }
@@ -63,5 +72,19 @@ public class RestauranteProdutoFotoController {
         foto.setNomeArquivo(arquivo.getOriginalFilename());
 
         return assembler.toModel(fotoProdutoService.salvar(foto, arquivo.getInputStream()));
+    }
+
+    @DeleteMapping
+    public void removerFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        fotoProdutoService.remover(restauranteId, produtoId);
+    }
+
+    private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+        boolean compativel = mediaTypesAceitas.stream()
+                .anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
+
+        if (!compativel) {
+            throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
+        }
     }
 }
