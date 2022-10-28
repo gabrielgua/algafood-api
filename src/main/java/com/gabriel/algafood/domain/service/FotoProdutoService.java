@@ -1,5 +1,6 @@
 package com.gabriel.algafood.domain.service;
 
+import com.gabriel.algafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.repository.ProdutoRepository;
 import lombok.AllArgsConstructor;
@@ -45,4 +46,10 @@ public class FotoProdutoService {
 
         return foto;
     }
+
+
+    public FotoProduto buscarPorId(Long restauranteId, Long produtoId) {
+        return produtoRepository.findFotoById(produtoId, restauranteId).orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
+    }
+
 }

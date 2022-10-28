@@ -9,10 +9,7 @@ import com.gabriel.algafood.domain.service.FotoStorageService;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -25,6 +22,12 @@ public class RestauranteProdutoFotoController {
     private FotoProdutoService fotoProdutoService;
     private ProdutoService produtoService;
     private FotoProdutoAssembler assembler;
+
+    @GetMapping
+    public FotoProdutoModel buscarPorId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        var fotoProduto = fotoProdutoService.buscarPorId(restauranteId, produtoId);
+        return assembler.toModel(fotoProduto);
+    }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(
