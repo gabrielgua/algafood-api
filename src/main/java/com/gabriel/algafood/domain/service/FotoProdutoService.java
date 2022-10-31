@@ -55,7 +55,10 @@ public class FotoProdutoService {
     @Transactional
     public void remover(Long restauranteId, Long produtoId) {
         var fotoProduto = buscarPorId(restauranteId, produtoId);
+
         produtoRepository.delete(fotoProduto);
+        produtoRepository.flush();
+
         fotoStorageService.remover(fotoProduto.getNomeArquivo());
     }
 

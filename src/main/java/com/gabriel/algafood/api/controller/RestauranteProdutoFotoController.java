@@ -10,6 +10,7 @@ import com.gabriel.algafood.domain.service.FotoStorageService;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -75,6 +76,7 @@ public class RestauranteProdutoFotoController {
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         fotoProdutoService.remover(restauranteId, produtoId);
     }
