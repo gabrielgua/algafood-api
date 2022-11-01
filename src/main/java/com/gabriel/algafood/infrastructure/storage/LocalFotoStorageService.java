@@ -4,14 +4,13 @@ import com.gabriel.algafood.core.storage.StorageProperties;
 import com.gabriel.algafood.domain.exception.StorageException;
 import com.gabriel.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-//@Service
-public class LocalFotoStorageServiceImpl implements FotoStorageService {
+
+public class LocalFotoStorageService implements FotoStorageService {
 
 
     @Autowired
