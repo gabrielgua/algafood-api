@@ -4,9 +4,9 @@ import com.gabriel.algafood.core.storage.StorageProperties;
 import com.gabriel.algafood.domain.exception.StorageException;
 import com.gabriel.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -40,14 +40,19 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
-        Path arquivoPath = getArquivoPath(nomeArquivo);
-
+    public FotoRecuperada recuperar(String nomeArquivo) {
         try {
-            return Files.newInputStream(arquivoPath);
+            Path arquivoPath = getArquivoPath(nomeArquivo);
+
+            var fotoRecuperada = FotoRecuperada.builder()
+                    .inputStream(Files.newInputStream(arquivoPath))
+                    .build();
+
+            return fotoRecuperada;
         } catch (Exception ex) {
             throw new StorageException("Não foi possível recuperar o arquivo", ex);
         }
+
     }
 
     private Path getArquivoPath(String nomeArquivo) {
