@@ -2,6 +2,7 @@ package com.gabriel.algafood.infrastructure.storage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.gabriel.algafood.core.storage.StorageProperties;
@@ -45,7 +46,17 @@ public class S3FotoStorageService implements FotoStorageService {
 
     @Override
     public void remover(String nomeArquivo) {
+        try {
+            var caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+            var deleteObjectRequest = new DeleteObjectRequest(
+                    storageProperties.getS3().getBucket(),
+                    caminhoArquivo
+            );
 
+            amazonS3.deleteObject(deleteObjectRequest);
+        } catch (Exception ex) {
+            throw new StorageException("Não foi possível remover o arquivo da Amazon S3", ex);
+        }
     }
 
     @Override
