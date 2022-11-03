@@ -18,10 +18,20 @@ public class StatusPedidoService {
 
     private PedidoService pedidoService;
 
+    private EnvioEmailService envioEmailService;
+
     @Transactional
     public void confirmar(String codigoPedido) {
         Pedido pedido = pedidoService.buscarPorId(codigoPedido);
         pedido.confirmar();
+
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
+                .corpo("O Pedido de código <strong>" + pedido.getCodigo() + "</strong> foi confirmado e logo sairá para entrega.")
+                .destinatario(pedido.getCliente().getEmail())
+                .build();
+
+        envioEmailService.enviar(mensagem);
     }
 
     @Transactional
