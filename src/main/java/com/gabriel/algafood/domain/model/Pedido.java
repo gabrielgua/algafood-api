@@ -1,5 +1,6 @@
 package com.gabriel.algafood.domain.model;
 
+import com.gabriel.algafood.domain.event.PedidoCanceladoEvent;
 import com.gabriel.algafood.domain.event.PedidoConfirmadoEvent;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import lombok.Data;
@@ -78,6 +79,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar() {
         setStatus(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     public void entregar() {

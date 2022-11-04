@@ -1,24 +1,23 @@
 package com.gabriel.algafood.domain.listener;
 
-import com.gabriel.algafood.domain.event.PedidoConfirmadoEvent;
+import com.gabriel.algafood.domain.event.PedidoCanceladoEvent;
 import com.gabriel.algafood.domain.service.EnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-public class NotificacaoClientePedidoConfirmadoListener {
+public class NotificacaoClientePedidoCanceladoListener {
 
     @Autowired
     private EnvioEmailService envioEmailService;
 
-//    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    @TransactionalEventListener // AFTER_COMMIT <- padrão
-    public void aoConfirmarPedido(PedidoConfirmadoEvent event) {
+    @TransactionalEventListener
+    public void aoCancelarPedido(PedidoCanceladoEvent event) {
         var pedido = event.getPedido();
         var mensagem = EnvioEmailService.Mensagem.builder()
-                .assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
-                .corpo("pedido-confirmado.html")
+                .assunto(pedido.getRestaurante().getNome() + " - Pedido Cancelado")
+                .corpo("pedido-cancelado.html")
                 .variavel("pedido", pedido)
                 .destinatario(pedido.getCliente().getEmail())
                 .build();

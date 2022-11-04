@@ -25,6 +25,8 @@ public class StatusPedidoService {
     public void cancelar(String codigoPedido) {
         Pedido pedido = pedidoService.buscarPorId(codigoPedido);
         pedido.cancelar();
+
+        repository.save(pedido);
     }
 
     @Transactional
