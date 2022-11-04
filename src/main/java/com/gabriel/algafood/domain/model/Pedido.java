@@ -1,9 +1,11 @@
 package com.gabriel.algafood.domain.model;
 
+import com.gabriel.algafood.domain.event.PedidoConfirmadoEvent;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,8 +14,8 @@ import java.util.*;
 
 @Data
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pedido {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 
     @Id
     @EqualsAndHashCode.Include
@@ -70,6 +72,7 @@ public class Pedido {
     public void confirmar() {
         setStatus(StatusPedido.CONFIRMADO);
         setDataConfirmacao(OffsetDateTime.now());
+        registerEvent(new PedidoConfirmadoEvent(this));
     }
 
     public void cancelar() {
