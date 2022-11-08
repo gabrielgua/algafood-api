@@ -6,12 +6,14 @@ import com.gabriel.algafood.api.model.request.FormaPagamentoRequest;
 import com.gabriel.algafood.domain.service.FormaPagamentoService;
 import com.gabriel.algafood.domain.model.FormaPagamento;
 import lombok.AllArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @AllArgsConstructor
@@ -23,13 +25,19 @@ public class FormaPagamentoController {
 
 
     @GetMapping
-    public List<FormaPagamentoModel> listar() {
-        return assembler.toCollectionModel(service.listar());
+    public ResponseEntity<List<FormaPagamentoModel>> listar() {
+        var formasPagamentoModel = assembler.toCollectionModel(service.listar());
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formasPagamentoModel);
     }
 
     @GetMapping("/{id}")
-    public FormaPagamentoModel buscarPorId(@PathVariable Long id) {
-        return assembler.toModel(service.buscarPorId(id));
+    public ResponseEntity<FormaPagamentoModel> buscarPorId(@PathVariable Long id) {
+        var formaPagamentoModel = assembler.toModel(service.buscarPorId(id));
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formaPagamentoModel);
     }
 
     @PostMapping
