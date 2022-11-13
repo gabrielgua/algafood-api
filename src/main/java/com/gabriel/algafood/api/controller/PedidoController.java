@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.assembler.PedidoAssembler;
 import com.gabriel.algafood.api.model.PedidoModel;
 import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.model.request.PedidoRequest;
+import com.gabriel.algafood.api.openapi.controller.PedidoControllerModelOpenApi;
 import com.gabriel.algafood.core.data.PageableTranslator;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,17 +30,12 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerModelOpenApi {
 
     private PedidoService service;
     private PedidoAssembler assembler;
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string")
-    })
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
         pageable = traduzirPageable(pageable);
 
@@ -49,17 +46,13 @@ public class PedidoController {
         return pedidosResumoModelPage;
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string")
-    })
-    @GetMapping("/{codigoPedido}")
+
+    @GetMapping(path = "/{codigoPedido}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PedidoModel buscarPorId(@PathVariable String codigoPedido) {
         return assembler.toModel(service.buscarPorId(codigoPedido));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoModel salvar(@RequestBody @Valid PedidoRequest request) {
         try {

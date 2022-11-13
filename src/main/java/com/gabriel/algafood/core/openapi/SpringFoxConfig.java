@@ -4,8 +4,10 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.CozinhaModel;
+import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.openapi.model.CozinhasModelOpenApi;
 import com.gabriel.algafood.api.openapi.model.PageableModelOpenApi;
+import com.gabriel.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,16 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.*;
-import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -61,16 +60,22 @@ public class SpringFoxConfig {
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(Page.class, CozinhaModel.class),
-                        CozinhasModelOpenApi.class
-                ))
+                .alternateTypeRules(
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(Page.class, CozinhaModel.class),
+                                CozinhasModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(Page.class, PedidoResumoModel.class),
+                                PedidosResumoModelOpenApi.class
+                        )
+                )
                 .apiInfo(apiInfo())
                 .tags(
                         new Tag("Cidades", "Gerencia as Cidades"),
                         new Tag("Grupos", "Gerencia os Grupos"),
                         new Tag("Cozinhas", "Gerencia as Cozinhas"),
-                        new Tag("Formas de pagamento", "Gerencia as Formas de pagamento"));
+                        new Tag("Formas de pagamento", "Gerencia as Formas de pagamento"),
+                        new Tag("Pedidos", "Gerencia os pedidos"));
     }
 
     private List<Response> globalGetResponseMessages() {
