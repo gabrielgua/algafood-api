@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -49,6 +50,7 @@ public class SpringFoxConfig {
                 .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
                 .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .ignoredParameterTypes(ServletWebRequest.class)
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
@@ -56,7 +58,10 @@ public class SpringFoxConfig {
                         CozinhasModelOpenApi.class
                 ))
                 .apiInfo(apiInfo())
-                .tags(new Tag("Cidades", "Gerencia as Cidades"));
+                .tags(
+                        new Tag("Cidades", "Gerencia as Cidades"),
+                        new Tag("Grupos", "Gerencia os Grupos"),
+                        new Tag("Cozinhas", "Gerencia as Cozinhas"));
     }
 
     private List<Response> globalGetResponseMessages() {

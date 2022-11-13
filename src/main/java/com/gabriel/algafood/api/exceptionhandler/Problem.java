@@ -46,7 +46,7 @@ public class Problem {
         @ApiModelProperty(example = "nome")
         private String name;
 
-        @ApiModelProperty(example = "Nome da cidade não pode ser nulo")
+        @ApiModelProperty(example = "Nome não pode ser nulo")
         private String userMessage;
     }
 
