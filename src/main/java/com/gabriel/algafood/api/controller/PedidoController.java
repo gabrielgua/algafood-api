@@ -12,6 +12,8 @@ import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.filter.PedidoFilter;
 import com.gabriel.algafood.domain.service.PedidoService;
 import com.google.common.collect.ImmutableMap;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +33,11 @@ public class PedidoController {
     private PedidoService service;
     private PedidoAssembler assembler;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+                    name = "campos", paramType = "query", type = "string")
+    })
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
         pageable = traduzirPageable(pageable);
@@ -42,6 +49,11 @@ public class PedidoController {
         return pedidosResumoModelPage;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+                    name = "campos", paramType = "query", type = "string")
+    })
     @GetMapping("/{codigoPedido}")
     public PedidoModel buscarPorId(@PathVariable String codigoPedido) {
         return assembler.toModel(service.buscarPorId(codigoPedido));
