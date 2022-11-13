@@ -1,15 +1,14 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.CidadeAssembler;
+import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.CidadeModel;
 import com.gabriel.algafood.api.model.request.CidadeRequest;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.service.CidadeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,10 @@ public class CidadeController {
     }
 
     @ApiOperation("Busca uma cidade por ID")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
+            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+    })
     @GetMapping("/{id}")
     public CidadeModel buscarPorId(
             @ApiParam(value = "ID de uma cidade", example = "1")
@@ -42,6 +45,7 @@ public class CidadeController {
     }
 
     @ApiOperation("Cadastra uma cidade")
+    @ApiResponse(code = 201, message = "Cidade cadastrada")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel salvar(
@@ -56,6 +60,10 @@ public class CidadeController {
     }
 
     @ApiOperation("Atualiza uma cidade por ID")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Cidade atualizada"),
+            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+    })
     @PutMapping("/{id}")
     public CidadeModel editar(
             @ApiParam(name = "Corpo", value = "Representação de uma cidade com os novos dados")
@@ -72,7 +80,12 @@ public class CidadeController {
     }
 
     @ApiOperation("Remove uma cidade por ID")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Cidade removida"),
+            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+    })
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> remover(
             @ApiParam("ID de uma cidade")
             @PathVariable Long id) {
