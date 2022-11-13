@@ -3,12 +3,14 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.model.request.FormaPagamentoRequest;
+import com.gabriel.algafood.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.gabriel.algafood.domain.repository.FormaPagamentoRepository;
 import com.gabriel.algafood.domain.service.FormaPagamentoService;
 import com.gabriel.algafood.domain.model.FormaPagamento;
 import lombok.AllArgsConstructor;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -21,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @AllArgsConstructor
 @RequestMapping("formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     private FormaPagamentoService service;
     private FormaPagamentoAssembler assembler;
@@ -29,7 +31,7 @@ public class FormaPagamentoController {
 
 
     //Implementação de Deep ETags
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
         var eTag = "0";
@@ -49,14 +51,18 @@ public class FormaPagamentoController {
                 .body(formasPagamentoModel);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoModel> buscarPorId(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
         var eTag = "0";
         var dataUltimaAtualizacao = repository.getUltimaDataAtualizacaoById(id);
-        eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+        if (dataUltimaAtualizacao != null) {
+            eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+        }
+
         if (request.checkNotModified(eTag)) return null;
+
 
         var formaPagamentoModel = assembler.toModel(service.buscarPorId(id));
         return ResponseEntity.ok()
@@ -65,14 +71,14 @@ public class FormaPagamentoController {
                 .body(formaPagamentoModel);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel salvar(@RequestBody @Valid FormaPagamentoRequest request) {
         FormaPagamento formaPagamento = assembler.toEntity(request);
         return assembler.toModel(service.salvar(formaPagamento));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoModel editar(@PathVariable Long id,@RequestBody @Valid FormaPagamentoRequest request) {
         var formaPagamento = service.buscarPorId(id);
         assembler.copyToEntity(request, formaPagamento);
@@ -80,8 +86,7 @@ public class FormaPagamentoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
+    public void remover(@PathVariable Long id) {
         service.remover(id);
-        return ResponseEntity.noContent().build();
     }
 }

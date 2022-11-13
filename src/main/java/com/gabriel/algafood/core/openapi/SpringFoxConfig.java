@@ -61,7 +61,8 @@ public class SpringFoxConfig {
                 .tags(
                         new Tag("Cidades", "Gerencia as Cidades"),
                         new Tag("Grupos", "Gerencia os Grupos"),
-                        new Tag("Cozinhas", "Gerencia as Cozinhas"));
+                        new Tag("Cozinhas", "Gerencia as Cozinhas"),
+                        new Tag("Formas de pagamento", "Gerencia as Formas de pagamento"));
     }
 
     private List<Response> globalGetResponseMessages() {
