@@ -15,7 +15,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,16 +32,11 @@ public class FormaPagamentoController {
     @GetMapping
     public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
-
         var eTag = "0";
-        var dataUltimaAtualizacao = repository.getDataUltimaAtualizacao();
-        if (dataUltimaAtualizacao != null) {
-            eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
-        }
+        var data = repository.getUltimaDataAtualizacao();
+        eTag = String.valueOf(data.toEpochSecond());
 
-        if (request.checkNotModified(eTag)) {
-            return null;
-        }
+        if (request.checkNotModified(eTag)) return null;
 
         var formasPagamentoModel = assembler.toCollectionModel(service.listar());
         return ResponseEntity.ok()
@@ -56,9 +50,17 @@ public class FormaPagamentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FormaPagamentoModel> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<FormaPagamentoModel> buscarPorId(@PathVariable Long id, ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        var eTag = "0";
+        var dataUltimaAtualizacao = repository.getUltimaDataAtualizacaoById(id);
+        eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+        if (request.checkNotModified(eTag)) return null;
+
         var formaPagamentoModel = assembler.toModel(service.buscarPorId(id));
         return ResponseEntity.ok()
+                .eTag(eTag)
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 .body(formaPagamentoModel);
     }

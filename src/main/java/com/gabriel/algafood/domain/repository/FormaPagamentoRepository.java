@@ -11,5 +11,8 @@ import java.time.OffsetDateTime;
 public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
 
     @Query("SELECT MAX(dataAtualizacao) from FormaPagamento")
-    OffsetDateTime getDataUltimaAtualizacao();
+    OffsetDateTime getUltimaDataAtualizacao();
+
+    @Query("SELECT MAX(dataAtualizacao) from FormaPagamento WHERE id = :id")
+    OffsetDateTime getUltimaDataAtualizacaoById(Long id);
 }
