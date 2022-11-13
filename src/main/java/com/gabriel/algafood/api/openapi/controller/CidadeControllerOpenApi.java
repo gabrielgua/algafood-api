@@ -1,4 +1,4 @@
-package com.gabriel.algafood.api.controller.openapi;
+package com.gabriel.algafood.api.openapi.controller;
 
 import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.CidadeModel;
@@ -45,7 +45,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 204, message = "Cidade removida"),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    public ResponseEntity<Void> remover(
+    public void remover(
             @ApiParam("ID de uma cidade")
             Long id);
 

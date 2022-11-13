@@ -1,7 +1,7 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.CidadeAssembler;
-import com.gabriel.algafood.api.controller.openapi.CidadeControllerOpenApi;
+import com.gabriel.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.gabriel.algafood.api.model.CidadeModel;
 import com.gabriel.algafood.api.model.request.CidadeRequest;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
@@ -10,7 +10,7 @@ import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,18 +24,18 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeService service;
     private CidadeAssembler assembler;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CidadeModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel salvar(@RequestBody @Valid CidadeRequest request) {
         try {
@@ -46,7 +46,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel editar(@RequestBody @Valid CidadeRequest request, @PathVariable Long id) {
         try {
             Cidade cidadeAtual = service.buscarPorId(id);
@@ -59,9 +59,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
+    public void remover(@PathVariable Long id) {
         Cidade cidade = service.buscarPorId(id);
         service.remover(cidade.getId());
-        return ResponseEntity.noContent().build();
     }
 }

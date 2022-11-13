@@ -1,13 +1,14 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.GrupoAssembler;
-import com.gabriel.algafood.api.controller.openapi.GrupoControllerOpenApi;
+import com.gabriel.algafood.api.openapi.controller.GrupoControllerOpenApi;
 import com.gabriel.algafood.api.model.GrupoModel;
 import com.gabriel.algafood.api.model.request.GrupoRequest;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,24 +22,24 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoService service;
     private GrupoAssembler assembler;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GrupoModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoModel salvar(@RequestBody @Valid GrupoRequest request) {
         Grupo grupo = assembler.toEntity(request);
         return assembler.toModel(service.salvar(grupo));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel editar(@PathVariable Long id, @RequestBody @Valid GrupoRequest request) {
         Grupo grupo = service.buscarPorId(id);
         assembler.copyToEntity(request, grupo);
