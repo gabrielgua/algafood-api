@@ -1,6 +1,7 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.GrupoAssembler;
+import com.gabriel.algafood.api.controller.openapi.GrupoControllerOpenApi;
 import com.gabriel.algafood.api.model.GrupoModel;
 import com.gabriel.algafood.api.model.request.GrupoRequest;
 import com.gabriel.algafood.domain.model.Grupo;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     private GrupoService service;
     private GrupoAssembler assembler;
@@ -45,6 +46,7 @@ public class GrupoController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
         service.remover(id);
     }
