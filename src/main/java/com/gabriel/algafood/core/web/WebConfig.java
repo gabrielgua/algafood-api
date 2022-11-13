@@ -17,7 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .maxAge(30);
-
     }
 
     @Bean
