@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.assembler.FotoProdutoAssembler;
 import com.gabriel.algafood.api.model.FotoProdutoModel;
 import com.gabriel.algafood.api.model.request.FotoProdutoRequest;
+import com.gabriel.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.service.FotoProdutoService;
@@ -26,8 +27,8 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(value = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     private FotoProdutoService fotoProdutoService;
     private FotoStorageService fotoStorageService;
@@ -40,7 +41,7 @@ public class RestauranteProdutoFotoController {
         return assembler.toModel(fotoProduto);
     }
 
-    @GetMapping
+    @GetMapping(produces = ALL_VALUE)
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                                           @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
         try {
@@ -69,7 +70,7 @@ public class RestauranteProdutoFotoController {
         }
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public FotoProdutoModel atualizarFoto(
             @PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) throws IOException {
 

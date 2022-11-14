@@ -2,6 +2,7 @@ package com.gabriel.algafood.api.model.request;
 
 import com.gabriel.algafood.core.validation.annotations.FileContentType;
 import com.gabriel.algafood.core.validation.annotations.FileSize;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ public class FotoProdutoRequest {
     @FileContentType(allowed = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     private MultipartFile arquivo;
 
+    @ApiModelProperty(example = "Prime rib mal passado")
     @NotBlank
     private String descricao;
 }
