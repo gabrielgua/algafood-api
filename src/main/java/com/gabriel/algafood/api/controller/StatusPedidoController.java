@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.openapi.controller.StatusPedidoControllerOpenApi;
 import com.gabriel.algafood.domain.service.StatusPedidoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/pedidos/{codigoPedido}")
-public class StatusPedidoController {
+public class StatusPedidoController  implements StatusPedidoControllerOpenApi {
 
     private StatusPedidoService statusService;
 
