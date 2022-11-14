@@ -21,9 +21,9 @@ public interface PedidoControllerModelOpenApi {
             @ApiResponse(code = 400, message = "ID do pedido inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
     })
-    public PedidoModel buscarPorId(String codigoPedido);
+    public PedidoModel buscarPorId(@ApiParam(value = "Código do pedido", required = true) String codigoPedido);
 
     @ApiOperation("Cadastra um novo pedido")
     @ApiResponse(code = 201, message = "Pedido cadastrado")
-    public PedidoModel salvar(PedidoRequest request);
+    public PedidoModel salvar(@ApiParam(name = "Corpo", value = "Representação de um novo pedido", required = true) PedidoRequest request);
 }

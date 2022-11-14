@@ -5,16 +5,17 @@ import com.gabriel.algafood.api.assembler.RestauranteAssembler;
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
 import com.gabriel.algafood.api.model.view.RestauranteView;
-import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
-import com.gabriel.algafood.domain.service.RestauranteService;
+import com.gabriel.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
+import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Restaurante;
+import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,57 +25,33 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     private RestauranteService service;
     private SmartValidator validator;
 
     private RestauranteAssembler assembler;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(RestauranteView.Resumo.class)
     public List<RestauranteModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
-    @GetMapping(params = "view=nome")
+    @GetMapping(params = "view=nome", produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(RestauranteView.ApenasNome.class)
     public List<RestauranteModel> listarApenasNome() {
         return listar();
     }
 
-//    @GetMapping
-//    public MappingJacksonValue listar(@RequestParam(required = false) String view) {
-//        var restaurantes = service.listar();
-//        var restauranteModel = assembler.toCollectionModel(restaurantes);
-//
-//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(restauranteModel);
-//
-//        pedidosWrapper.setSerializationView(RestauranteView.Resumo.class);
-//
-//        if ("nome".equals(view)) {
-//            pedidosWrapper.setSerializationView(RestauranteView.ApenasNome.class);
-//        } else if ("completo".equals(view)) {
-//            pedidosWrapper.setSerializationView(null);
-//        }
-//
-//        return pedidosWrapper;
-//    }
 
-//    @GetMapping
-//    public List<RestauranteModel> listar() {
-//        return assembler.toCollectionModel(service.listar());
-//    }
-
-
-
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteModel buscarPorId(@PathVariable Long id) {
         Restaurante restaurante = service.buscarPorId(id);
         return assembler.toModel(restaurante);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteModel salvar(@RequestBody @Valid RestauranteRequest restauranteRequest) {
         try {
@@ -85,7 +62,7 @@ public class RestauranteController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteModel editar(@RequestBody @Valid RestauranteRequest restauranteRequest, @PathVariable Long id) {
         try {
             Restaurante restauranteAtual = service.buscarPorId(id);
@@ -97,10 +74,9 @@ public class RestauranteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
+    public void remover(@PathVariable Long id) {
         Restaurante restaurante = service.buscarPorId(id);
         service.remover(restaurante.getId());
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/ativo")
@@ -136,8 +112,8 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}/ativo-ou-inativo")
-    public RestauranteModel ativarOuInativar(@PathVariable Long id) {
-        return assembler.toModel(service.ativarOuInativar(id));
+    public void ativarOuInativar(@PathVariable Long id) {
+        service.ativarOuInativar(id);
     }
 
     @PutMapping("/{id}/abertura")

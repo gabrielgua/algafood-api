@@ -1,6 +1,7 @@
 package com.gabriel.algafood.api.model.request;
 
 import com.gabriel.algafood.core.validation.annotations.ValorZeroIncluiDescricao;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,9 +20,11 @@ import java.math.BigDecimal;
 )
 public class RestauranteRequest {
 
+    @ApiModelProperty(example = "1")
     @NotBlank
     private String nome;
 
+    @ApiModelProperty(example = "12.00")
     @NotNull
     @PositiveOrZero
     private BigDecimal taxaFrete;
