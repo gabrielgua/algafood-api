@@ -11,20 +11,20 @@ import java.util.List;
 public interface CidadeControllerOpenApi {
 
     @ApiOperation("Lista as cidades")
-    public List<CidadeModel> listar();
+    List<CidadeModel> listar();
 
     @ApiOperation("Busca uma cidade por ID")
     @ApiResponses({
             @ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    public CidadeModel buscarPorId(
+    CidadeModel buscarPorId(
             @ApiParam(value = "ID de uma cidade", example = "1")
             Long id);
 
     @ApiOperation("Cadastra uma cidade")
     @ApiResponse(code = 201, message = "Cidade cadastrada")
-    public CidadeModel salvar(
+    CidadeModel salvar(
             @ApiParam(name = "Corpo", value = "Representação de uma nova cidade")
             CidadeRequest request);
 
@@ -33,7 +33,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 200, message = "Cidade atualizada"),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    public CidadeModel editar(
+    CidadeModel editar(
             @ApiParam(name = "Corpo", value = "Representação de uma cidade com os novos dados")
             CidadeRequest request,
             @ApiParam(value = "ID de uma cidade", example = "2")
@@ -44,7 +44,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 204, message = "Cidade removida"),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    public void remover(
+    void remover(
             @ApiParam("ID de uma cidade")
             Long id);
 

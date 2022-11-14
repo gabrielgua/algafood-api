@@ -11,25 +11,25 @@ import org.springframework.data.domain.Pageable;
 public interface CozinhaControllerOpenApi {
 
     @ApiOperation("Lista as cozinhas")
-    public Page<CozinhaModel> listar(Pageable pageable);
+    Page<CozinhaModel> listar(Pageable pageable);
 
     @ApiOperation("Busca uma cozinha por ID")
     @ApiResponses({
             @ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    public CozinhaModel buscarPorId(@ApiParam(value = "ID de uma cozinha", example = "1") Long id);
+    CozinhaModel buscarPorId(@ApiParam(value = "ID de uma cozinha", example = "1") Long id);
 
     @ApiOperation("Cadastra uma cozinha")
     @ApiResponse(code = 201, message = "Cozinha cadastrada")
-    public CozinhaModel adicionar(@ApiParam(name = "Corpo", value = "Representação de uma nova cozinha") CozinhaRequest request);
+    CozinhaModel adicionar(@ApiParam(name = "Corpo", value = "Representação de uma nova cozinha") CozinhaRequest request);
 
     @ApiOperation("Atualiza uma cozinha por ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Cozinha atualizada"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    public CozinhaModel editar(
+    CozinhaModel editar(
             @ApiParam(name = "Corpo", value = "Representação de uma cozinha com novos dados") CozinhaRequest request,
             @ApiParam(value = "ID de uma cozinha") Long id);
 
@@ -38,5 +38,5 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 204, message = "Cozinha removida"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    public void remover(@ApiParam(value = "ID de uma cozinha") Long id);
+    void remover(@ApiParam(value = "ID de uma cozinha") Long id);
 }

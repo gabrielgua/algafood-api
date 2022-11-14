@@ -14,16 +14,16 @@ public interface PedidoControllerModelOpenApi {
 
 
     @ApiOperation("Lista os pedidos")
-    public Page<PedidoResumoModel> pesquisar(Pageable pageable, PedidoFilter filter);
+    Page<PedidoResumoModel> pesquisar(Pageable pageable, PedidoFilter filter);
 
     @ApiOperation("Busca um pedido por ID")
     @ApiResponses({
             @ApiResponse(code = 400, message = "ID do pedido inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
     })
-    public PedidoModel buscarPorId(@ApiParam(value = "Código do pedido", required = true) String codigoPedido);
+    PedidoModel buscarPorId(@ApiParam(value = "Código do pedido", required = true) String codigoPedido);
 
     @ApiOperation("Cadastra um novo pedido")
     @ApiResponse(code = 201, message = "Pedido cadastrado")
-    public PedidoModel salvar(@ApiParam(name = "Corpo", value = "Representação de um novo pedido", required = true) PedidoRequest request);
+    PedidoModel salvar(@ApiParam(name = "Corpo", value = "Representação de um novo pedido", required = true) PedidoRequest request);
 }

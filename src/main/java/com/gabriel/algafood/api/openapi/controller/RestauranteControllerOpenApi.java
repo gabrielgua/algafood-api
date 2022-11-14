@@ -17,10 +17,10 @@ public interface RestauranteControllerOpenApi {
             @ApiImplicitParam(value = "Nome da projeção de restaurantes", allowableValues = "nome",
                     name = "view", paramType = "query", type = "string")
     })
-    public List<RestauranteModel> listar();
+    List<RestauranteModel> listar();
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)
-    public List<RestauranteModel> listarApenasNome();
+    List<RestauranteModel> listarApenasNome();
 
     @ApiOperation("Busca um restaurante por ID")
     @ApiResponses({
@@ -28,18 +28,18 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class),
 
     })
-    public RestauranteModel buscarPorId(@ApiParam(value = "ID do restaurante", required = true) Long id);
+    RestauranteModel buscarPorId(@ApiParam(value = "ID do restaurante", required = true) Long id);
 
     @ApiOperation("Cadastra um novo restaurante")
     @ApiResponse(code = 201, message = "Restaurante cadastrado")
-    public RestauranteModel salvar(@ApiParam(name = "Corpo", value = "Representação de um novo restaurante", required = true) RestauranteRequest restauranteRequest);
+    RestauranteModel salvar(@ApiParam(name = "Corpo", value = "Representação de um novo restaurante", required = true) RestauranteRequest restauranteRequest);
 
     @ApiOperation("Atualiza um restaurante")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Restaurante atualizado"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public RestauranteModel editar(
+    RestauranteModel editar(
             @ApiParam(name = "Corpo", value = "Representação de um restaurante com novos dados", required = true) RestauranteRequest restauranteRequest,
             @ApiParam(value = "ID de um restaurante", required = true) Long id);
 
@@ -49,62 +49,62 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante removido"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void remover(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void remover(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
     @ApiOperation("Ativa um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante ativado"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void ativar(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void ativar(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
     @ApiOperation("Inativa um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante inativado"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void inativar(@ApiParam(value = "Id de um restaurante", required = true) Long id);
+    void inativar(@ApiParam(value = "Id de um restaurante", required = true) Long id);
 
     @ApiOperation("Ativa múltiplos restaurantes")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurantes ativados"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void ativarMultiplos(@ApiParam(value = "Lista com IDs de restaurantes", required = true) List<Long> restauranteIds);
+    void ativarMultiplos(@ApiParam(value = "Lista com IDs de restaurantes", required = true) List<Long> restauranteIds);
 
     @ApiOperation("Inativa múltiplos restaurantes")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurantes inativados"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void invativarMultiplos(@ApiParam(value = "Lista com IDs de restaurantes", required = true) List<Long> restauranteIds);
+    void invativarMultiplos(@ApiParam(value = "Lista com IDs de restaurantes", required = true) List<Long> restauranteIds);
 
     @ApiOperation("Ativa ou inativa um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Aplica o status de ativação oposto ao atual"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void ativarOuInativar(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void ativarOuInativar(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
     @ApiOperation("Abre um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante aberto"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void abrirRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void abrirRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
     @ApiOperation("Fecha um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante fechado"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void fecharRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void fecharRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
     @ApiOperation("Abre ou fecha um restaurante")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Aplica o status de abertura oposto ao atual"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    public void abrirOuFecharRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
+    void abrirOuFecharRestaurante(@ApiParam(value = "ID de um restaurante", required = true) Long id);
 
 }
