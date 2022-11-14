@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.model.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +13,20 @@ import java.math.BigDecimal;
 @Setter
 public class ProdutoRequest {
 
+    @ApiModelProperty(example = "Camarão tailandês")
     @NotBlank
     private String nome;
+
+    @ApiModelProperty(example = "16 camarões grandes ao molho picante")
     @NotBlank
     private String descricao;
+
+    @ApiModelProperty(example = "110.00")
     @NotNull
     @PositiveOrZero
     private BigDecimal preco;
 
+    @ApiModelProperty(example = "false")
     @NotNull
     private Boolean ativo;
 }
