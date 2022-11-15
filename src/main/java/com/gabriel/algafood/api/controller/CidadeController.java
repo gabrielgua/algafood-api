@@ -2,26 +2,20 @@ package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.ResourceUriHelper;
 import com.gabriel.algafood.api.assembler.CidadeAssembler;
-import com.gabriel.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.gabriel.algafood.api.model.CidadeModel;
 import com.gabriel.algafood.api.model.request.CidadeRequest;
+import com.gabriel.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -40,7 +34,21 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscarPorId(@PathVariable Long id) {
-        return assembler.toModel(service.buscarPorId(id));
+        var cidade = service.buscarPorId(id);
+        var cidadeModel = assembler.toModel(cidade);
+
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+                .slash(cidadeModel.getId()).withSelfRel());
+
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+                .withRel("cidades"));
+
+        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+                .slash(cidadeModel.getEstado().getId()).withSelfRel());
+
+        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+                .withRel("estados"));
+        return cidadeModel;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
