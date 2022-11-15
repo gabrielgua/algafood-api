@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.ResourceUriHelper;
 import com.gabriel.algafood.api.assembler.CidadeAssembler;
 import com.gabriel.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.gabriel.algafood.api.model.CidadeModel;
@@ -9,11 +10,18 @@ import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -40,7 +48,10 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeModel salvar(@RequestBody @Valid CidadeRequest request) {
         try {
             Cidade cidade = assembler.toEntity(request);
-            return assembler.toModel(service.salvar(cidade));
+            var cidadeModel = assembler.toModel(service.salvar(cidade));
+
+            ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+            return cidadeModel;
         } catch (EstadoNaoEncontradoException ex) {
             throw new NegocioException(ex.getMessage());
         }

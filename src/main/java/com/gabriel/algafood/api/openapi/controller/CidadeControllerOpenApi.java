@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.CidadeModel;
 import com.gabriel.algafood.api.model.request.CidadeRequest;
 import io.swagger.annotations.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
