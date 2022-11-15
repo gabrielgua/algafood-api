@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.gabriel.algafood.domain.filter.VendaDiariaFilter;
 import com.gabriel.algafood.domain.model.dto.VendaDiaria;
 import com.gabriel.algafood.domain.service.VendaQueryService;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     private VendaQueryService vendaQueryService;
     private VendaReportService vendaReportService;
