@@ -10,13 +10,17 @@ import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @AllArgsConstructor
@@ -27,28 +31,13 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeAssembler assembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CidadeModel> listar() {
+    public CollectionModel<CidadeModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
-
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscarPorId(@PathVariable Long id) {
-        var cidade = service.buscarPorId(id);
-        var cidadeModel = assembler.toModel(cidade);
-
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-                .slash(cidadeModel.getId()).withSelfRel());
-
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-                .withRel("cidades"));
-
-        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
-                .slash(cidadeModel.getEstado().getId()).withSelfRel());
-
-        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
-                .withRel("estados"));
-        return cidadeModel;
+        return assembler.toModel(service.buscarPorId(id));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
