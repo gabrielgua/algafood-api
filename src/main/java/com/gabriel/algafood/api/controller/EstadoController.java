@@ -7,6 +7,7 @@ import com.gabriel.algafood.api.openapi.controller.EstadoControllerOpenApi;
 import com.gabriel.algafood.domain.model.Estado;
 import com.gabriel.algafood.domain.service.EstadoService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class EstadoController implements EstadoControllerOpenApi {
     private EstadoAssembler assembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<EstadoModel> listar() {
+    public CollectionModel<EstadoModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
