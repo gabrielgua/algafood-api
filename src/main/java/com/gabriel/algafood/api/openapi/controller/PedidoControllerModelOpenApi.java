@@ -8,13 +8,14 @@ import com.gabriel.algafood.domain.filter.PedidoFilter;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 @Api(tags = "Pedidos")
 public interface PedidoControllerModelOpenApi {
 
 
     @ApiOperation("Lista os pedidos")
-    Page<PedidoResumoModel> pesquisar(Pageable pageable, PedidoFilter filter);
+    PagedModel<PedidoResumoModel> pesquisar(Pageable pageable, PedidoFilter filter);
 
     @ApiOperation("Busca um pedido por ID")
     @ApiResponses({

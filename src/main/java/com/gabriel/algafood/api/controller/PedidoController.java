@@ -1,6 +1,7 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.assembler.PedidoAssembler;
+import com.gabriel.algafood.api.assembler.PedidoResumoAssembler;
 import com.gabriel.algafood.api.model.PedidoModel;
 import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.model.request.PedidoRequest;
@@ -16,10 +17,13 @@ import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,16 +38,18 @@ public class PedidoController implements PedidoControllerModelOpenApi {
 
     private PedidoService service;
     private PedidoAssembler assembler;
+    private PedidoResumoAssembler resumoAssembler;
+
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
+    public PagedModel<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
         pageable = traduzirPageable(pageable);
-
         Page<Pedido> pedidos = service.listar(filter, pageable);
-        List<PedidoResumoModel> pedidosResumoModel = assembler.toCollectionResumoModel(pedidos.getContent());
-        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidos.getTotalElements());
+        PagedModel<PedidoResumoModel> pagedPedidosResumoModel = pagedResourcesAssembler.toModel(pedidos, resumoAssembler);
 
-        return pedidosResumoModelPage;
+        return pagedPedidosResumoModel;
     }
 
 
