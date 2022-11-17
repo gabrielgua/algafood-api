@@ -6,6 +6,7 @@ import com.gabriel.algafood.api.openapi.controller.RestauranteUsuarioControllerO
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     private UsuarioAssembler usuarioAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
+    public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         return usuarioAssembler.toCollectionModel(restaurante.getResponsaveis());
     }

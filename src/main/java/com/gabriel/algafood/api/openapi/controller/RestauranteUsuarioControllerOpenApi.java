@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.openapi.controller;
 import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.UsuarioModel;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do restaurante inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    List<UsuarioModel> listarResponsaveis(@ApiParam(value = "ID de um restaurante", required = true) Long restauranteId);
+    CollectionModel<UsuarioModel> listarResponsaveis(@ApiParam(value = "ID de um restaurante", required = true) Long restauranteId);
 
     @ApiOperation("Vincula um usuário com um restaurante pelos IDs")
     @ApiResponses({

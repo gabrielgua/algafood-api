@@ -9,6 +9,7 @@ import com.gabriel.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.service.UsuarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioAssembler assembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UsuarioModel> listar() {
+    public CollectionModel<UsuarioModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
