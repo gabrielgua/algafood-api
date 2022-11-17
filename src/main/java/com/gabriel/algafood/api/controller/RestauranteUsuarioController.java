@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/restaurantes/{restauranteId}/responsaveis")
@@ -24,7 +26,9 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
-        return usuarioAssembler.toCollectionModel(restaurante.getResponsaveis());
+        return usuarioAssembler.toCollectionModel(restaurante.getResponsaveis())
+                .removeLinks()
+                .add(linkTo(methodOn(RestauranteUsuarioController.class).listarResponsaveis(restauranteId)).withSelfRel());
     }
 
     @PutMapping("/{usuarioId}")

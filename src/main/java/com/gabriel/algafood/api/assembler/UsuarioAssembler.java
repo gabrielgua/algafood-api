@@ -49,7 +49,6 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
                 .add(linkTo(methodOn(UsuarioController.class)).withSelfRel());
     }
 
-
     //    public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios) {
 //        return usuarios.stream()
 //                .map(usuario -> toModel(usuario))
