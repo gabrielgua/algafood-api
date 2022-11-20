@@ -40,12 +40,15 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
 
         pedidoModel.add(apiLinks.linkToPedidos());
 
-        pedidoModel.getFormaPagamento().add(linkTo(methodOn(FormaPagamentoController.class).buscarPorId(formaPagamentoId, null)).withSelfRel());
-        pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class).buscarPorId(restauranteId)).withSelfRel());
-        pedidoModel.getCliente().add(linkTo(methodOn(UsuarioController.class).buscarPorId(usuarioId)).withSelfRel());
-        pedidoModel.getEnderecoEntrega().getCidade().add(linkTo(methodOn(CidadeController.class).buscarPorId(cidadeId)).withSelfRel());
-        pedidoModel.getItens().forEach(item -> item.add(linkTo(methodOn(RestauranteProdutoController.class)
-                .buscarPorId(restauranteId, item.getProdutoId())).withRel("produto")));
+        pedidoModel.getFormaPagamento().add(apiLinks.linkToFormaPagamento(formaPagamentoId));
+
+        pedidoModel.getRestaurante().add(apiLinks.linkToRestaurante(restauranteId));
+
+        pedidoModel.getCliente().add(apiLinks.linkToUsuario(usuarioId));
+
+        pedidoModel.getEnderecoEntrega().getCidade().add(apiLinks.linkToCidade(cidadeId));
+
+        pedidoModel.getItens().forEach(item -> item.add(apiLinks.linkToProduto(restauranteId, item.getProdutoId())));
 
         return pedidoModel;
     }

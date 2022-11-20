@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.assembler;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.controller.CozinhaController;
 import com.gabriel.algafood.api.model.CozinhaModel;
 import com.gabriel.algafood.api.model.request.CozinhaRequest;
@@ -20,6 +21,9 @@ public class CozinhaAssembler extends RepresentationModelAssemblerSupport<Cozinh
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks links;
+
     public CozinhaAssembler() {
         super(CozinhaController.class, CozinhaModel.class);
     }
@@ -29,7 +33,7 @@ public class CozinhaAssembler extends RepresentationModelAssemblerSupport<Cozinh
         var cozinhaModel = createModelWithId(cozinha.getId(), cozinha);
         modelMapper.map(cozinha, cozinhaModel);
 
-        cozinhaModel.add(linkTo(CozinhaController.class).withRel("cozinhas"));
+        cozinhaModel.add(links.linkToCozinhas("cozinhas"));
 
 
         return cozinhaModel;

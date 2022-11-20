@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.assembler;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.controller.CidadeController;
 import com.gabriel.algafood.api.controller.EstadoController;
 import com.gabriel.algafood.api.model.CidadeModel;
@@ -24,6 +25,9 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks links;
+
     public CidadeAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -34,9 +38,9 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
         var cidadeModel = createModelWithId(cidade.getId(), cidade);
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-        cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class).buscarPorId(cidadeModel.getEstado().getId())).withSelfRel());
-        cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
+        cidadeModel.add(links.linkToCidades("cidades"));
+        cidadeModel.getEstado().add(links.linkToEstado(cidade.getEstado().getId()));
+        cidadeModel.getEstado().add(links.linkToEstados("estados"));
 
         return cidadeModel;
     }
@@ -49,7 +53,7 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
     public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
 
         return super.toCollectionModel(entities)
-                .add(linkTo(CidadeController.class).withSelfRel());
+                .add(links.linkToCidades());
     }
 
     //    public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {

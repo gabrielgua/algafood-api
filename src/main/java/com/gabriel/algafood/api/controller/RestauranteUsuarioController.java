@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.assembler.UsuarioAssembler;
 import com.gabriel.algafood.api.model.UsuarioModel;
 import com.gabriel.algafood.api.openapi.controller.RestauranteUsuarioControllerOpenApi;
@@ -23,12 +24,14 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     private RestauranteService restauranteService;
     private UsuarioAssembler usuarioAssembler;
 
+    private ApiLinks links;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         return usuarioAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(linkTo(methodOn(RestauranteUsuarioController.class).listarResponsaveis(restauranteId)).withSelfRel());
+                .add(links.linkToResponsaveisRestaurante(restauranteId));
     }
 
     @PutMapping("/{usuarioId}")

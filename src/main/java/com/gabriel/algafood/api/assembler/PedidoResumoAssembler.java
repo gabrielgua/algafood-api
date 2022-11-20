@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.assembler;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.controller.PedidoController;
 import com.gabriel.algafood.api.controller.RestauranteController;
 import com.gabriel.algafood.api.controller.UsuarioController;
@@ -19,6 +20,9 @@ public class PedidoResumoAssembler extends RepresentationModelAssemblerSupport<P
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks links;
+
     public PedidoResumoAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
     }
@@ -31,9 +35,9 @@ public class PedidoResumoAssembler extends RepresentationModelAssemblerSupport<P
         var restauranteId = pedidoResumoModel.getRestaurante().getId();
         var usuarioId = pedidoResumoModel.getCliente().getId();
 
-        pedidoResumoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
-        pedidoResumoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class).buscarPorId(restauranteId)).withSelfRel());
-        pedidoResumoModel.getCliente().add(linkTo(methodOn(UsuarioController.class).buscarPorId(usuarioId)).withSelfRel());
+        pedidoResumoModel.add(links.linkToPedidos());
+        pedidoResumoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
+        pedidoResumoModel.getCliente().add(links.linkToUsuario(usuarioId));
 
         return pedidoResumoModel;
     }

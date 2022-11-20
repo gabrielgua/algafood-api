@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.assembler;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.controller.EstadoController;
 import com.gabriel.algafood.api.model.EstadoModel;
 import com.gabriel.algafood.api.model.request.EstadoRequest;
@@ -21,6 +22,9 @@ public class EstadoAssembler extends RepresentationModelAssemblerSupport<Estado,
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks links;
+
     public EstadoAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
@@ -30,7 +34,7 @@ public class EstadoAssembler extends RepresentationModelAssemblerSupport<Estado,
         var estadoModel = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
+        estadoModel.add(links.linkToEstados("estados"));
         return estadoModel;
     }
 

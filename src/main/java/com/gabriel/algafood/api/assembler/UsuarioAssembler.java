@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.assembler;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.controller.UsuarioController;
 import com.gabriel.algafood.api.controller.UsuarioGrupoController;
 import com.gabriel.algafood.api.model.UsuarioModel;
@@ -24,6 +25,9 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     public UsuarioAssembler() {
         super(UsuarioController.class, UsuarioModel.class);
     }
@@ -33,8 +37,8 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
         var usuarioModel = createModelWithId(usuario.getId(), usuario);
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(linkTo(methodOn(UsuarioController.class).listar()).withRel("usuarios"));
-        usuarioModel.add(linkTo(methodOn(UsuarioGrupoController.class).listarGrupos(usuario.getId())).withRel("grupos-usuarios"));
+        usuarioModel.add(apiLinks.linkToUsuarios("usuarios"));
+        usuarioModel.add(apiLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuarios"));
 
         return usuarioModel;
     }
