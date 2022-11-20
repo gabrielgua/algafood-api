@@ -6,6 +6,7 @@ import com.gabriel.algafood.api.model.PedidoModel;
 import com.gabriel.algafood.api.model.PedidoResumoModel;
 import com.gabriel.algafood.api.model.request.PedidoRequest;
 import com.gabriel.algafood.api.openapi.controller.PedidoControllerModelOpenApi;
+import com.gabriel.algafood.core.data.PageWrapper;
 import com.gabriel.algafood.core.data.PageableTranslator;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
@@ -45,11 +46,12 @@ public class PedidoController implements PedidoControllerModelOpenApi {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) Pageable pageable, PedidoFilter filter) {
-        pageable = traduzirPageable(pageable);
-        Page<Pedido> pedidos = service.listar(filter, pageable);
-        PagedModel<PedidoResumoModel> pagedPedidosResumoModel = pagedResourcesAssembler.toModel(pedidos, resumoAssembler);
+        Pageable pageableTraduzido = traduzirPageable(pageable);
+        Page<Pedido> pedidos = service.listar(filter, pageableTraduzido);
 
-        return pagedPedidosResumoModel;
+        pedidos = new PageWrapper<>(pedidos, pageable);
+
+        return pagedResourcesAssembler.toModel(pedidos, resumoAssembler);
     }
 
 
