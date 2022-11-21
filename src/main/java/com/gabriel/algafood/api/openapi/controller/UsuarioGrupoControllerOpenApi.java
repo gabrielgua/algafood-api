@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.openapi.controller;
 import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.GrupoModel;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UsuarioGrupoControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do usuário inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoModel> listarGrupos(@ApiParam(value = "ID de um usuário", required = true) Long usuarioId);
+    CollectionModel<GrupoModel> listarGrupos(@ApiParam(value = "ID de um usuário", required = true) Long usuarioId);
 
     @ApiOperation("Vincula um grupo a um usuário")
     @ApiResponses({

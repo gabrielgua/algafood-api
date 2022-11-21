@@ -6,6 +6,7 @@ import com.gabriel.algafood.api.openapi.controller.UsuarioGrupoControllerOpenApi
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.service.UsuarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     private GrupoAssembler grupoAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<GrupoModel> listarGrupos(@PathVariable Long usuarioId) {
+    public CollectionModel<GrupoModel> listarGrupos(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarPorId(usuarioId);
         return grupoAssembler.toCollectionModel(usuario.getGrupos());
     }

@@ -220,6 +220,18 @@ public class ApiLinks {
         return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF_VALUE);
     }
 
+    public Link linkToGrupos(String rel) {
+        return linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos() {
+        return linkToGrupos(IanaLinkRelations.SELF_VALUE);
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class).listarPermissoes(grupoId)).withRel(rel);
+    }
+
     public Link linkToCozinha(Long cozinhaId) {
         return linkTo(methodOn(CozinhaController.class).buscarPorId(cozinhaId)).withSelfRel();
     }

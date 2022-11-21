@@ -7,6 +7,7 @@ import com.gabriel.algafood.api.model.request.GrupoRequest;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoAssembler assembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<GrupoModel> listar() {
+    public CollectionModel<GrupoModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
