@@ -85,7 +85,11 @@ public class SpringFoxConfig {
                                 PermissoesModelOpenApi.class),
                         AlternateTypeRules.newRule(
                                 typeResolver.resolve(PagedModel.class, PedidoResumoModel.class),
-                                PedidosResumoModelOpenApi.class)
+                                PedidosResumoModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
+                                ProdutosModelOpenApi.class
+                        )
                 )
                 .apiInfo(apiInfo())
                 .tags(
