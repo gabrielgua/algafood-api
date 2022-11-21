@@ -3,9 +3,7 @@ package com.gabriel.algafood.core.openapi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gabriel.algafood.api.exceptionhandler.Problem;
-import com.gabriel.algafood.api.model.CidadeModel;
-import com.gabriel.algafood.api.model.CozinhaModel;
-import com.gabriel.algafood.api.model.PedidoResumoModel;
+import com.gabriel.algafood.api.model.*;
 import com.gabriel.algafood.api.openapi.model.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +20,10 @@ import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.Response;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -73,7 +74,14 @@ public class SpringFoxConfig {
                         ),
                         AlternateTypeRules.newRule(
                                 typeResolver.resolve(CollectionModel.class, CidadeModel.class),
-                                CidadesModelOpenApi.class)
+                                CidadesModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, EstadoModel.class),
+                                EstadosModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, FormaPagamentoModel.class),
+                                FormasPagamentoModelOpenApi.class
+                        )
                 )
                 .apiInfo(apiInfo())
                 .tags(
