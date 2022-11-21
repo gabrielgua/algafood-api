@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.controller;
 import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.assembler.PermissaoAssembler;
 import com.gabriel.algafood.api.model.PermissaoModel;
+import com.gabriel.algafood.api.openapi.controller.PermissaoControllerOpenApi;
 import com.gabriel.algafood.domain.service.PermissaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("permissoes")
-public class PermissaoController {
+public class PermissaoController implements PermissaoControllerOpenApi {
 
     private PermissaoService service;
     private PermissaoAssembler assembler;

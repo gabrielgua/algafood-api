@@ -109,6 +109,14 @@ public class ApiLinks {
         return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToUsuarioDesvincularGrupo(Long usuarioId, Long grupoId, String rel) {
+        return linkTo(methodOn(UsuarioGrupoController.class).desvincularGrupo(usuarioId, grupoId)).withRel(rel);
+    }
+
+    public Link linkToUsuarioVincularGrupo(Long usuarioId, String rel) {
+        return linkTo(methodOn(UsuarioGrupoController.class).vincularGrupo(usuarioId, null)).withRel(rel);
+    }
+
     public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId)).withRel(rel);
     }

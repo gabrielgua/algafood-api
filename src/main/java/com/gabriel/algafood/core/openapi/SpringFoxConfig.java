@@ -80,7 +80,8 @@ public class SpringFoxConfig {
                         new Tag("Estados", "Gerencia os Estados"),
                         new Tag("Produtos", "Gerencia os Produtos"),
                         new Tag("Usuários", "Gerencia os Usuários"),
-                        new Tag("Estatísticas", "Estatísticas da Algafood"));
+                        new Tag("Estatísticas", "Estatísticas da Algafood"),
+                        new Tag("Permissões", "Gerencia as Permissões"));
     }
 
     private List<Response> globalGetResponseMessages() {
