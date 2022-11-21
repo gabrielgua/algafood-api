@@ -33,7 +33,7 @@ public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
     @ApiModelProperty(example = "2022-11-13T22:06:32Z")
     private OffsetDateTime dataCriacao;
 
-    private RestauranteResumoModel restaurante;
+    private RestauranteApenasNomeModel restaurante;
     private UsuarioModel cliente;
 
 }

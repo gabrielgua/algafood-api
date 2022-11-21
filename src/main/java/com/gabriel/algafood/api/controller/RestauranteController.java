@@ -1,10 +1,12 @@
 package com.gabriel.algafood.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.gabriel.algafood.api.assembler.RestauranteApenasNomeAssembler;
 import com.gabriel.algafood.api.assembler.RestauranteAssembler;
+import com.gabriel.algafood.api.assembler.RestauranteBasicoAssembler;
+import com.gabriel.algafood.api.model.RestauranteApenasNomeModel;
+import com.gabriel.algafood.api.model.RestauranteBasicoModel;
 import com.gabriel.algafood.api.model.RestauranteModel;
 import com.gabriel.algafood.api.model.request.RestauranteRequest;
-import com.gabriel.algafood.api.model.view.RestauranteView;
 import com.gabriel.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.gabriel.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -13,10 +15,10 @@ import com.gabriel.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,20 +30,19 @@ import java.util.List;
 public class RestauranteController implements RestauranteControllerOpenApi {
 
     private RestauranteService service;
-    private SmartValidator validator;
 
     private RestauranteAssembler assembler;
+    private RestauranteBasicoAssembler basicoAssembler;
+    private RestauranteApenasNomeAssembler nomeAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @JsonView(RestauranteView.Resumo.class)
-    public List<RestauranteModel> listar() {
-        return assembler.toCollectionModel(service.listar());
+    public CollectionModel<RestauranteBasicoModel> listar() {
+        return basicoAssembler.toCollectionModel(service.listar());
     }
 
     @GetMapping(params = "view=nome", produces = MediaType.APPLICATION_JSON_VALUE)
-    @JsonView(RestauranteView.ApenasNome.class)
-    public List<RestauranteModel> listarApenasNome() {
-        return listar();
+    public CollectionModel<RestauranteApenasNomeModel> listarApenasNome() {
+        return nomeAssembler.toCollectionModel(service.listar());
     }
 
 
@@ -81,14 +82,16 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @PutMapping("/{id}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativar(@PathVariable Long id) {
+    public ResponseEntity<Void> ativar(@PathVariable Long id) {
         service.ativar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/inativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativar(@PathVariable Long id) {
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
         service.inativar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/ativacoes")
@@ -118,14 +121,16 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @PutMapping("/{id}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abrirRestaurante(@PathVariable Long id) {
+    public ResponseEntity<Void> abrirRestaurante(@PathVariable Long id) {
         service.abrirRestaurante(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fecharRestaurante(@PathVariable Long id) {
+    public ResponseEntity<Void> fecharRestaurante(@PathVariable Long id) {
         service.fecharRestaurante(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/abertura-ou-fechamento")

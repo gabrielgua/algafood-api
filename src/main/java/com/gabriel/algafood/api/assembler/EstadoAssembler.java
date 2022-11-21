@@ -45,15 +45,8 @@ public class EstadoAssembler extends RepresentationModelAssemblerSupport<Estado,
     @Override
     public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(EstadoController.class).withSelfRel());
+                .add(links.linkToEstados());
     }
-
-
-    //    public List<EstadoModel> toCollectionModel(List<Estado> estados) {
-//        return estados.stream()
-//                .map(estado -> toModel(estado))
-//                .collect(Collectors.toList());
-//    }
 
     public void copyToEntity (EstadoRequest request, Estado estado) {
         modelMapper.map(request, estado);

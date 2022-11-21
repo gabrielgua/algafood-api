@@ -28,6 +28,26 @@ public class ApiLinks {
         return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIAVEIS.concat(filtroVariables)), "pedidos");
     }
 
+    public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
+        return linkTo(methodOn(StatusPedidoController.class).confirmarPedido(codigoPedido)).withRel(rel);
+    }
+
+    public Link linkToEntregarPedido(String codigoPedido, String rel) {
+        return linkTo(methodOn(StatusPedidoController.class).confirmarEntrega(codigoPedido)).withRel(rel);
+    }
+
+    public Link linkToCancelarPedido(String codigoPedido, String rel) {
+        return linkTo(methodOn(StatusPedidoController.class).cancelarPedido(codigoPedido)).withRel(rel);
+    }
+
+    public Link linkToRestaurantes(String rel) {
+        return linkTo(RestauranteController.class).withRel(rel);
+    }
+
+    public Link linkToRestaurantes() {
+        return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
+    }
+
     public Link linkToRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteController.class)
                 .buscarPorId(restauranteId)).withRel(rel);
@@ -61,6 +81,10 @@ public class ApiLinks {
 
     public Link linkToGruposUsuario(Long usuarioId) {
         return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId)).withRel(rel);
     }
 
     public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
@@ -123,6 +147,10 @@ public class ApiLinks {
 
     public Link linkToProduto(Long restauranteId, Long produtoId) {
         return linkToProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCozinha(Long cozinhaId) {
+        return linkTo(methodOn(CozinhaController.class).buscarPorId(cozinhaId)).withSelfRel();
     }
 
     public Link linkToCozinhas(String rel) {

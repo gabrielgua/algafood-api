@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -39,7 +38,7 @@ public class PedidoModel extends RepresentationModel<PedidoModel> {
     private OffsetDateTime dataEntrega;
 
     private FormaPagamentoModel formaPagamento;
-    private RestauranteResumoModel restaurante;
+    private RestauranteApenasNomeModel restaurante;
     private UsuarioModel cliente;
     private EnderecoModel enderecoEntrega;
     private List<ItemPedidoModel> itens;

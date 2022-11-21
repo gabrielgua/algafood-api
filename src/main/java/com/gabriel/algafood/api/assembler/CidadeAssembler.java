@@ -56,12 +56,6 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
                 .add(links.linkToCidades());
     }
 
-    //    public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {
-//        return cidades.stream()
-//                .map(cidade -> toModel(cidade))
-//                .collect(Collectors.toList());
-//    }
-
     public void copyToEntity (CidadeRequest request, Cidade cidade) {
         // Para evitar Exception do JPA org.hibernate.HibernateException: Tried to change the Identifier of an instance...
         cidade.setEstado(new Estado());
