@@ -69,9 +69,6 @@ public class SpringFoxConfig {
                                 typeResolver.resolve(PagedModel.class, CozinhaModel.class),
                                 CozinhasModelOpenApi.class),
                         AlternateTypeRules.newRule(
-                                typeResolver.resolve(Page.class, PedidoResumoModel.class),
-                                PedidosResumoModelOpenApi.class),
-                        AlternateTypeRules.newRule(
                                 typeResolver.resolve(CollectionModel.class, CidadeModel.class),
                                 CidadesModelOpenApi.class),
                         AlternateTypeRules.newRule(
@@ -85,9 +82,10 @@ public class SpringFoxConfig {
                                 GruposModelOpenApi.class),
                         AlternateTypeRules.newRule(
                                 typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
-                                PermissoesModelOpenApi.class
-                        )
-
+                                PermissoesModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(PagedModel.class, PedidoResumoModel.class),
+                                PedidosResumoModelOpenApi.class)
                 )
                 .apiInfo(apiInfo())
                 .tags(
