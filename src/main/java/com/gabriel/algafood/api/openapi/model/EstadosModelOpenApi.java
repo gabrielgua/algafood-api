@@ -4,7 +4,7 @@ import com.gabriel.algafood.api.model.EstadoModel;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class EstadosModelOpenApi {
 
     private EstadosEmbeddedModelOpenApi _embedded;
-    private Link _links;
+    private Links _links;
 
     @Getter
     @Setter

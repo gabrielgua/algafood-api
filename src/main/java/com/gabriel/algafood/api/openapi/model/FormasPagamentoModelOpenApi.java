@@ -3,7 +3,7 @@ package com.gabriel.algafood.api.openapi.model;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class FormasPagamentoModelOpenApi {
 
     private FormasPagamentoEmbeddedModelOpenApi _embedded;
-    private Link _links;
+    private Links _links;
 
     @Data
     @ApiModel("FormasPagamentoEmbeddedModel")
