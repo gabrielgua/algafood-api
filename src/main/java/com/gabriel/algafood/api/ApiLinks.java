@@ -272,4 +272,23 @@ public class ApiLinks {
         return linkToPermissoes(IanaLinkRelations.SELF_VALUE);
     }
 
+    public Link linkToEstatisticas(String rel) {
+        return linkTo(EstatisticasController.class).withRel(rel);
+    }
+
+    public Link linkToEstatisticasVendasDiarias(String rel) {
+        var filtoVariables = new TemplateVariables(
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffset", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
+
+        var pedidosUrl = linkTo(methodOn(EstatisticasController.class)
+                .consultarVendasDiarias(null, null)).toUri().toString();
+
+        return Link.of(UriTemplate.of(pedidosUrl, filtoVariables), rel);
+    }
+
+
 }

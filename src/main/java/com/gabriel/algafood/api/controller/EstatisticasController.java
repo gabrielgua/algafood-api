@@ -1,11 +1,13 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.gabriel.algafood.domain.filter.VendaDiariaFilter;
 import com.gabriel.algafood.domain.model.dto.VendaDiaria;
 import com.gabriel.algafood.domain.service.VendaQueryService;
 import com.gabriel.algafood.domain.service.VendaReportService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,16 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     private VendaQueryService vendaQueryService;
     private VendaReportService vendaReportService;
+    private ApiLinks links;
+
+
+    @GetMapping
+    public EstatisticaModel mostrarLinks() {
+        var estatisticasModel = new EstatisticaModel();
+        estatisticasModel.add(links.linkToEstatisticasVendasDiarias("vendas-diarias"));
+
+        return estatisticasModel;
+    }
 
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria>  consultarVendasDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
@@ -40,5 +52,8 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
                 .contentType(MediaType.APPLICATION_PDF)
                 .headers(headers)
                 .body(bytesPdf);
+    }
+
+    private static class EstatisticaModel extends RepresentationModel<EstatisticaModel> {
     }
 }
