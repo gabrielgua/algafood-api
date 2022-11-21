@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.UsuarioModel;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -22,14 +23,14 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 204, message = "Usuário vinculado ao restaurante"),
             @ApiResponse(code = 404, message = "Usuário ou restaurante não encontrados", response = Problem.class)
     })
-    void vincularResponsavel(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
-                                    @ApiParam(value = "ID do usuário", required = true) Long usuarioId);
+    ResponseEntity<Void> vincularResponsavel(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+                                             @ApiParam(value = "ID do usuário", required = true) Long usuarioId);
 
     @ApiOperation("Desvincula um usuário com um restaurante pelos IDs")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Usuário desvinculado do restaurante"),
             @ApiResponse(code = 404, message = "Usuário ou restaurante não encontrados", response = Problem.class)
     })
-    void desvincularResponsavel(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+    ResponseEntity<Void> desvincularResponsavel(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
                                        @ApiParam(value = "ID do usuário") Long usuarioId);
 }

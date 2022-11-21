@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
             @ApiResponse(code = 204, message = "Forma de pagamento desvinculada"),
             @ApiResponse(code = 404, message = "Forma de pagamento ou restaurante não encontrados")
     })
-    void desvincular(
+    ResponseEntity<Void> desvincular(
             @ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
             @ApiParam(value = "ID da forma de pagamento", required = true) Long formaPagamentoId);
 
@@ -31,7 +32,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
             @ApiResponse(code = 204, message = "Forma de pagamento vinculada"),
             @ApiResponse(code = 404, message = "Forma de pagamento ou restaurante não encontrados")
     })
-    void vincular(
+    ResponseEntity<Void> vincular(
             @ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
             @ApiParam(value = "ID da forma de pagamento", required = true) Long formaPagamentoId);
 }

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,20 +29,30 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = service.buscarPorId(restauranteId);
-        return assembler.toCollectionModel(restaurante.getFormasPagamento())
+        var formasPagamentoModel = assembler.toCollectionModel(restaurante.getFormasPagamento())
                 .removeLinks()
-                .add(links.linkToRestauranteFormasPagamento(restauranteId));
+                .add(links.linkToRestauranteFormasPagamento(restauranteId))
+                .add(links.linkToRestauranteVincularFormaPagamento(restauranteId, "vincular"));
+
+        formasPagamentoModel.getContent().forEach(formaPagamentoModel ->
+                formaPagamentoModel.add(links.linkToRestauranteDesvincularFormaPagamento(restauranteId, formaPagamentoModel.getId(), "desvincular")));
+
+
+
+        return formasPagamentoModel;
     }
 
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desvincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+    public ResponseEntity<Void> desvincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         service.desvincularFormaPagamento(restauranteId, formaPagamentoId);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+    public ResponseEntity<Void> vincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         service.vincularFormaPagamento(restauranteId, formaPagamentoId);
+        return ResponseEntity.noContent().build();
     }
 }

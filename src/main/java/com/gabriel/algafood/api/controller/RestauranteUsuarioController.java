@@ -10,11 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @AllArgsConstructor
@@ -29,20 +26,29 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
-        return usuarioAssembler.toCollectionModel(restaurante.getResponsaveis())
+        var usuariosModel = usuarioAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(links.linkToResponsaveisRestaurante(restauranteId));
+                .add(links.linkToResponsaveisRestaurante(restauranteId))
+                .add(links.linkToRestauranteVincularResponsavel(restauranteId, "vincular"));
+
+        usuariosModel.getContent().forEach(usuario ->
+                usuario.add(links.linkToRestauranteDesvincularResponsavel(restauranteId, usuario.getId(), "desvincular")));
+
+
+        return usuariosModel;
     }
 
     @PutMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+    public ResponseEntity<Void> vincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.vincularResponsavel(restauranteId, usuarioId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desvincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+    public ResponseEntity<Void> desvincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desvincularResponsavel(restauranteId, usuarioId);
+        return ResponseEntity.noContent().build();
     }
 }

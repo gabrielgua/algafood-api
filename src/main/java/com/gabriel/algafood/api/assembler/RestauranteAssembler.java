@@ -39,9 +39,14 @@ public class RestauranteAssembler extends RepresentationModelAssemblerSupport<Re
 
         restauranteModel.add(links.linkToRestaurantes("restaurantes"));
         restauranteModel.getCozinha().add(links.linkToCozinha(cozinhaId));
-        restauranteModel.getEndereco().getCidade().add(links.linkToCidade(cidadeId));
+
+        if (restauranteModel.getEndereco() != null && restauranteModel.getEndereco().getCidade() != null) {
+            restauranteModel.getEndereco().getCidade().add(links.linkToCidade(cidadeId));
+        }
+
         restauranteModel.add(links.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
         restauranteModel.add(links.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
+        restauranteModel.add(links.linkToProdutos(restaurante.getId(), "produtos"));
 
         if (restaurante.ativacaoPermitida()) {
             restauranteModel.add(links.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));

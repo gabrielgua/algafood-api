@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.assembler.ProdutoAssembler;
 import com.gabriel.algafood.api.model.ProdutoModel;
 import com.gabriel.algafood.api.model.request.ProdutoRequest;
@@ -9,6 +10,7 @@ import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +25,13 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private RestauranteService restauranteService;
     private ProdutoService produtoService;
     private ProdutoAssembler assembler;
+    private ApiLinks links;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
+    public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
-        return assembler.toCollectionModel(produtoService.listar(restaurante));
+        return assembler.toCollectionModel(produtoService.listar(restaurante))
+                .add(links.linkToProdutos(restauranteId));
     }
 
     @GetMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,14 +67,14 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @GetMapping(params = "view=ativos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProdutoModel> listarAtivos(@PathVariable Long restauranteId) {
+    public CollectionModel<ProdutoModel> listarAtivos(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
         List<Produto> produtosAtivos = produtoService.listar(restaurante, true);
         return assembler.toCollectionModel(produtosAtivos);
     }
 
     @GetMapping(params = "view=inativos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProdutoModel> listarInativos(@PathVariable Long restauranteId) {
+    public CollectionModel<ProdutoModel> listarInativos(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
         List<Produto> produtosInativos = produtoService.listar(restaurante, false);
         return assembler.toCollectionModel(produtosInativos);

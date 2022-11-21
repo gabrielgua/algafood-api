@@ -16,7 +16,7 @@ public class ApiLinks {
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
     );
 
-    private static final TemplateVariables PROJECAO_VARIABLES = new TemplateVariables(
+    private static final TemplateVariables PROJECAO_VARIABLE = new TemplateVariables(
             new TemplateVariable("view", TemplateVariable.VariableType.REQUEST_PARAM)
     );
 
@@ -50,7 +50,7 @@ public class ApiLinks {
 
     public Link linkToRestaurantes(String rel) {
         String restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
-        return Link.of(UriTemplate.of(restaurantesUrl, PROJECAO_VARIABLES), rel);
+        return Link.of(UriTemplate.of(restaurantesUrl, PROJECAO_VARIABLE), rel);
     }
 
     public Link linkToRestaurantes() {
@@ -117,6 +117,13 @@ public class ApiLinks {
         return linkToRestauranteFormasPagamento(restauranteId, IanaLinkRelations.SELF_VALUE);
     }
 
+    public Link linkToRestauranteDesvincularFormaPagamento(Long restauranteId, Long formaPagamentoId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class).desvincular(restauranteId, formaPagamentoId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteVincularFormaPagamento(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class).vincular(restauranteId, null)).withRel(rel);
+    }
 
     public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioController.class)
@@ -125,6 +132,14 @@ public class ApiLinks {
 
     public Link linkToResponsaveisRestaurante(Long restauranteId) {
         return linkToResponsaveisRestaurante(restauranteId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestauranteDesvincularResponsavel(Long restauranteId, Long usuarioId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioController.class).desvincularResponsavel(restauranteId, usuarioId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteVincularResponsavel(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioController.class).vincularResponsavel(restauranteId, null)).withRel(rel);
     }
 
     public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
@@ -186,6 +201,15 @@ public class ApiLinks {
 
     public Link linkToProduto(Long restauranteId, Long produtoId) {
         return linkToProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToProdutos(Long restauranteId, String rel) {
+        String produtosUri = linkTo(methodOn(RestauranteProdutoController.class).listar(restauranteId)).toUri().toString();
+        return Link.of(UriTemplate.of(produtosUri, PROJECAO_VARIABLE), rel);
+    }
+
+    public Link linkToProdutos(Long restauranteId) {
+        return linkToProdutos(restauranteId, IanaLinkRelations.SELF_VALUE);
     }
 
     public Link linkToCozinha(Long cozinhaId) {
