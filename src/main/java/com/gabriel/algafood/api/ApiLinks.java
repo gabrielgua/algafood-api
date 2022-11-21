@@ -289,6 +289,4 @@ public class ApiLinks {
 
         return Link.of(UriTemplate.of(pedidosUrl, filtoVariables), rel);
     }
-
-
 }
