@@ -8,7 +8,6 @@ import com.gabriel.algafood.api.openapi.model.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -88,8 +87,13 @@ public class SpringFoxConfig {
                                 PedidosResumoModelOpenApi.class),
                         AlternateTypeRules.newRule(
                                 typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
-                                ProdutosModelOpenApi.class
-                        )
+                                ProdutosModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, RestauranteBasicoModel.class),
+                                RestaurantesBasicoModelOpenApi.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
+                                UsuariosModelOpenApi.class)
                 )
                 .apiInfo(apiInfo())
                 .tags(
