@@ -212,6 +212,14 @@ public class ApiLinks {
         return linkToProdutos(restauranteId, IanaLinkRelations.SELF_VALUE);
     }
 
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel) {
+        return linkTo(methodOn(RestauranteProdutoFotoController.class).buscarPorId(restauranteId, produtoId)).withRel(rel);
+    }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
+        return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF_VALUE);
+    }
+
     public Link linkToCozinha(Long cozinhaId) {
         return linkTo(methodOn(CozinhaController.class).buscarPorId(cozinhaId)).withSelfRel();
     }
