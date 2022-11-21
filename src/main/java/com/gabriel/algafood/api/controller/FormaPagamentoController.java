@@ -4,10 +4,11 @@ import com.gabriel.algafood.api.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.model.request.FormaPagamentoRequest;
 import com.gabriel.algafood.api.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.gabriel.algafood.domain.model.FormaPagamento;
 import com.gabriel.algafood.domain.repository.FormaPagamentoRepository;
 import com.gabriel.algafood.domain.service.FormaPagamentoService;
-import com.gabriel.algafood.domain.model.FormaPagamento;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -32,7 +32,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
     //Implementação de Deep ETags
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
         var eTag = "0";
         var data = repository.getUltimaDataAtualizacao();

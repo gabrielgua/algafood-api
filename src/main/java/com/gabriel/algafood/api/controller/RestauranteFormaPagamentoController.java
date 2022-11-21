@@ -1,5 +1,6 @@
 package com.gabriel.algafood.api.controller;
 
+import com.gabriel.algafood.api.ApiLinks;
 import com.gabriel.algafood.api.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.assembler.RestauranteAssembler;
 import com.gabriel.algafood.api.model.FormaPagamentoModel;
@@ -7,6 +8,7 @@ import com.gabriel.algafood.api.openapi.controller.RestauranteFormaPagamentoCont
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +23,14 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     private RestauranteService service;
 
     private FormaPagamentoAssembler assembler;
+    private ApiLinks links;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
+    public CollectionModel<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = service.buscarPorId(restauranteId);
-        return assembler.toCollectionModel(restaurante.getFormasPagamento());
+        return assembler.toCollectionModel(restaurante.getFormasPagamento())
+                .removeLinks()
+                .add(links.linkToRestauranteFormasPagamento(restauranteId));
     }
 
     @DeleteMapping("/{formaPagamentoId}")

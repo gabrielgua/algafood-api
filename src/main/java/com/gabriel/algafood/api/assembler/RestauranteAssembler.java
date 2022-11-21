@@ -46,15 +46,12 @@ public class RestauranteAssembler extends RepresentationModelAssemblerSupport<Re
         if (restaurante.ativacaoPermitida()) {
             restauranteModel.add(links.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
         }
-
         if (restaurante.inativacaoPermitida()) {
             restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "inativar"));
         }
-
         if (restaurante.aberturaPermitida()) {
             restauranteModel.add(links.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
         }
-
         if (restaurante.fechamentoPermitido()) {
             restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
         }

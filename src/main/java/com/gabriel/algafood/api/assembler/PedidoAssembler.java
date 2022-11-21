@@ -17,7 +17,7 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
     private ModelMapper modelMapper;
 
     @Autowired
-    private ApiLinks apiLinks;
+    private ApiLinks links;
 
     public PedidoAssembler() {
         super(PedidoController.class, PedidoModel.class);
@@ -34,25 +34,25 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
         var cidadeId = pedidoModel.getEnderecoEntrega().getCidade().getId();
 
 
-        pedidoModel.add(apiLinks.linkToPedidos());
+        pedidoModel.add(links.linkToPedidos());
 
         if (pedido.podeSerConfirmado()) {
-            pedidoModel.add(apiLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+            pedidoModel.add(links.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
         }
 
         if (pedido.podeSerCancelado()) {
-            pedidoModel.add(apiLinks.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
+            pedidoModel.add(links.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
         }
 
         if (pedido.podeSerEntregue()) {
-            pedidoModel.add(apiLinks.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
+            pedidoModel.add(links.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
         }
 
-        pedidoModel.getFormaPagamento().add(apiLinks.linkToFormaPagamento(formaPagamentoId));
-        pedidoModel.getRestaurante().add(apiLinks.linkToRestaurante(restauranteId));
-        pedidoModel.getCliente().add(apiLinks.linkToUsuario(usuarioId));
-        pedidoModel.getEnderecoEntrega().getCidade().add(apiLinks.linkToCidade(cidadeId));
-        pedidoModel.getItens().forEach(item -> item.add(apiLinks.linkToProduto(restauranteId, item.getProdutoId())));
+        pedidoModel.getFormaPagamento().add(links.linkToFormaPagamento(formaPagamentoId));
+        pedidoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
+        pedidoModel.getCliente().add(links.linkToUsuario(usuarioId));
+        pedidoModel.getEnderecoEntrega().getCidade().add(links.linkToCidade(cidadeId));
+        pedidoModel.getItens().forEach(item -> item.add(links.linkToProduto(restauranteId, item.getProdutoId())));
 
         return pedidoModel;
     }

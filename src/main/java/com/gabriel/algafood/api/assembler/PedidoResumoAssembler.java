@@ -9,6 +9,7 @@ import com.gabriel.algafood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -41,10 +42,4 @@ public class PedidoResumoAssembler extends RepresentationModelAssemblerSupport<P
 
         return pedidoResumoModel;
     }
-
-    //    public List<PedidoResumoModel> toCollectionModel(List<Pedido> pedidos) {
-//        return pedidos.stream()
-//                .map(pedido -> toModel(pedido))
-//                .collect(Collectors.toList());
-//    }
 }

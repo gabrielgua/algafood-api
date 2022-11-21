@@ -10,13 +10,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class ApiLinks {
 
-    private static final TemplateVariables PAGINACAO_VARIAVEIS = new TemplateVariables(
+    private static final TemplateVariables PAGINACAO_VARIABLES = new TemplateVariables(
             new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
             new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
     );
 
-    public Link linkToPedidos() {
+    private static final TemplateVariables PROJECAO_VARIABLES = new TemplateVariables(
+            new TemplateVariable("view", TemplateVariable.VariableType.REQUEST_PARAM)
+    );
+
+    public Link linkToPedidos(String rel) {
         TemplateVariables filtroVariables = new TemplateVariables(
                 new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
@@ -25,7 +29,11 @@ public class ApiLinks {
         );
 
         String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
-        return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIAVEIS.concat(filtroVariables)), "pedidos");
+        return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
+    }
+
+    public Link linkToPedidos() {
+        return linkToPedidos(IanaLinkRelations.SELF_VALUE);
     }
 
     public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
@@ -41,7 +49,12 @@ public class ApiLinks {
     }
 
     public Link linkToRestaurantes(String rel) {
-        return linkTo(RestauranteController.class).withRel(rel);
+        String restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
+        return Link.of(UriTemplate.of(restaurantesUrl, PROJECAO_VARIABLES), rel);
+    }
+
+    public Link linkToRestaurantes() {
+        return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
     }
 
     public Link linkToRestauranteAbertura(Long restauranteId, String rel) {
@@ -60,9 +73,6 @@ public class ApiLinks {
         return linkTo(methodOn(RestauranteController.class).ativar(restauranteId)).withRel(rel);
     }
 
-    public Link linkToRestaurantes() {
-        return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
-    }
 
     public Link linkToRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteController.class)
@@ -103,6 +113,11 @@ public class ApiLinks {
         return linkTo(methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId)).withRel(rel);
     }
 
+    public Link linkToRestauranteFormasPagamento(Long restauranteId) {
+        return linkToRestauranteFormasPagamento(restauranteId, IanaLinkRelations.SELF_VALUE);
+    }
+
+
     public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioController.class)
                 .listarResponsaveis(restauranteId)).withRel(rel);
@@ -119,6 +134,14 @@ public class ApiLinks {
 
     public Link linkToFormaPagamento(Long formaPagamentoId) {
         return linkToFormaPagamento(formaPagamentoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToFormaPagamentos(String rel) {
+        return linkTo(FormaPagamentoController.class).withRel(rel);
+    }
+
+    public Link linkToFormaPagamentos() {
+        return linkToFormaPagamentos(IanaLinkRelations.SELF_VALUE);
     }
 
     public Link linkToCidade(Long cidadeId, String rel) {
