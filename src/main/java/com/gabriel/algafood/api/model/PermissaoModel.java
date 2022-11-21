@@ -3,10 +3,11 @@ package com.gabriel.algafood.api.model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
-public class PermissaoModel {
+public class PermissaoModel extends RepresentationModel<PermissaoModel> {
 
     @ApiModelProperty(example = "1")
     private Long id;

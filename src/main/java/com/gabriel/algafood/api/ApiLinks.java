@@ -232,6 +232,18 @@ public class ApiLinks {
         return linkTo(methodOn(GrupoPermissaoController.class).listarPermissoes(grupoId)).withRel(rel);
     }
 
+    public Link linkToGrupoPermissoes(Long grupoId) {
+        return linkToGrupoPermissoes(grupoId, IanaLinkRelations.SELF_VALUE);
+    }
+
+    public Link linkToGrupoVincularPermissao(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class).vincularPermissao(grupoId, null)).withRel(rel);
+    }
+
+    public Link linkToGrupoDesvincularPermissao(Long grupoId, Long permissaoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class).desvincularPermissao(grupoId, permissaoId)).withRel(rel);
+    }
+
     public Link linkToCozinha(Long cozinhaId) {
         return linkTo(methodOn(CozinhaController.class).buscarPorId(cozinhaId)).withSelfRel();
     }
@@ -243,4 +255,13 @@ public class ApiLinks {
     public Link linkToCozinhas() {
         return linkToCozinhas(IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToPermissoes(String rel) {
+        return linkTo(PermissaoController.class).withRel(rel);
+    }
+
+    public Link linkToPermissoes() {
+        return linkToPermissoes(IanaLinkRelations.SELF_VALUE);
+    }
+
 }
