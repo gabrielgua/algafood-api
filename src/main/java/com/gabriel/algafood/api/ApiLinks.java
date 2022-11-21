@@ -44,6 +44,22 @@ public class ApiLinks {
         return linkTo(RestauranteController.class).withRel(rel);
     }
 
+    public Link linkToRestauranteAbertura(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteController.class).abrirRestaurante(restauranteId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteFechamento(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteController.class).fecharRestaurante(restauranteId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteInativacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteController.class).inativar(restauranteId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteAtivacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteController.class).ativar(restauranteId)).withRel(rel);
+    }
+
     public Link linkToRestaurantes() {
         return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
     }
