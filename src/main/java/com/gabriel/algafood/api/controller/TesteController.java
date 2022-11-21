@@ -4,9 +4,11 @@ import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.repository.CozinhaRepository;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import static com.gabriel.algafood.infrastructure.spec.RestauranteSpecs.comNomeS
 
 @RestController
 @AllArgsConstructor
+@ApiIgnore
 public class TesteController {
 
     private CozinhaRepository cozinhaRepository;

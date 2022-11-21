@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -40,6 +41,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return basicoAssembler.toCollectionModel(service.listar());
     }
 
+    @ApiIgnore
     @GetMapping(params = "view=nome", produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<RestauranteApenasNomeModel> listarApenasNome() {
         return nomeAssembler.toCollectionModel(service.listar());

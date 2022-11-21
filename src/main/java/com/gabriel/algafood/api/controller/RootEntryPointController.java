@@ -1,16 +1,19 @@
 package com.gabriel.algafood.api.controller;
 
 import com.gabriel.algafood.api.ApiLinks;
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@ApiIgnore
 public class RootEntryPointController {
 
     private ApiLinks links;
