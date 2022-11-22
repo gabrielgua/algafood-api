@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("restaurantes")
+@RequestMapping("/v1/restaurantes")
 public class RestauranteController implements RestauranteControllerOpenApi {
 
     private RestauranteService service;

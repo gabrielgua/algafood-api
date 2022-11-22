@@ -24,9 +24,5 @@ public class WebConfig implements WebMvcConfigurer {
     public Filter shallowEtagHeaderFilter() {
         return new ShallowEtagHeaderFilter();
     }
-
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.defaultContentType(ApiMediaTypes.V2_APPLICATION_JSON);
-    }
+    
 }

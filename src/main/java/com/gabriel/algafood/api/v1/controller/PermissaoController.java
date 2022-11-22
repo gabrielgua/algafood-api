@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("permissoes")
+@RequestMapping("/v1/permissoes")
 public class PermissaoController implements PermissaoControllerOpenApi {
 
     private PermissaoService service;

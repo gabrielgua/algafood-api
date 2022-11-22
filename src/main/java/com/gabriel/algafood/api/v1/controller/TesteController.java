@@ -1,17 +1,18 @@
 package com.gabriel.algafood.api.v1.controller;
 
-import com.gabriel.algafood.domain.model.Cozinha;
+import com.gabriel.algafood.api.v1.assembler.CozinhaAssembler;
+import com.gabriel.algafood.api.v1.assembler.RestauranteAssembler;
+import com.gabriel.algafood.api.v1.model.CozinhaModel;
+import com.gabriel.algafood.api.v1.model.RestauranteModel;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.repository.CozinhaRepository;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
-import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.gabriel.algafood.infrastructure.spec.RestauranteSpecs.comFreteGratis;
 import static com.gabriel.algafood.infrastructure.spec.RestauranteSpecs.comNomeSemelhante;
@@ -22,6 +23,8 @@ import static com.gabriel.algafood.infrastructure.spec.RestauranteSpecs.comNomeS
 public class TesteController {
 
     private CozinhaRepository cozinhaRepository;
+    private CozinhaAssembler cozinhaAssembler;
+    private RestauranteAssembler restauranteAssembler;
     private RestauranteRepository restauranteRepository;
 
     @GetMapping("restaurantes/com-frete-gratis-e-nome-semelhante")
@@ -30,14 +33,13 @@ public class TesteController {
     }
 
     @GetMapping("/restaurantes/primeiro")
-    public Optional<Restaurante> buscarPrimeiroRestaurante() {
-        return restauranteRepository.buscarPrimeiro();
+    public RestauranteModel buscarPrimeiroRestaurante() {
+        return restauranteAssembler.toModel(restauranteRepository.buscarPrimeiro());
     }
 
     @GetMapping("/cozinhas/primeiro")
-    public Optional<Cozinha> buscarPrimeiraCozinha() {
-        return cozinhaRepository.buscarPrimeiro();
+    public CozinhaModel buscarPrimeiraCozinha() {
+        var cozinha = cozinhaRepository.buscarPrimeiro();
+        return cozinhaAssembler.toModel(cozinha);
     }
-
-
 }

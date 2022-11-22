@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("grupos")
+@RequestMapping("/v1/grupos")
 public class GrupoController implements GrupoControllerOpenApi {
 
     private GrupoService service;

@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-
+@ApiIgnore
 @RestController
 @AllArgsConstructor
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-@ApiIgnore
+@RequestMapping(path = "v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
 
     private ApiLinks links;
@@ -38,7 +37,6 @@ public class RootEntryPointController {
 
 
     private static class RootEntryPointModel extends RepresentationModel<RootEntryPointModel> {
-
     }
 
 }

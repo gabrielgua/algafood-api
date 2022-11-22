@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("usuarios")
+@RequestMapping("/v1/usuarios")
 public class UsuarioController implements UsuarioControllerOpenApi {
 
     private UsuarioService service;

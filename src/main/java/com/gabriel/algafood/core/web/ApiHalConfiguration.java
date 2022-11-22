@@ -11,6 +11,7 @@ public class ApiHalConfiguration {
     @Bean
     public HalConfiguration globalPolicy() {
         return new HalConfiguration()
+                .withMediaType(MediaType.ALL)
                 .withMediaType(MediaType.APPLICATION_JSON)
                 .withMediaType(ApiMediaTypes.V1_APPLICATION_JSON)
                 .withMediaType(ApiMediaTypes.V2_APPLICATION_JSON);

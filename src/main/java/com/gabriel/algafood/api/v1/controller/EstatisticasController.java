@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("estatisticas")
+@RequestMapping("/v1/estatisticas")
 public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     private VendaQueryService vendaQueryService;

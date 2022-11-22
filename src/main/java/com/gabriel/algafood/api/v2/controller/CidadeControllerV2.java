@@ -11,29 +11,30 @@ import com.gabriel.algafood.domain.service.CidadeService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("cidades")
+@RequestMapping("/v2/cidades")
 public class CidadeControllerV2 {
 
     private CidadeService service;
     private CidadeAssemblerV2 assemblerV2;
 
-    @GetMapping(produces = ApiMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModelV2> listar() {
         return assemblerV2.toCollectionModel(service.listar());
     }
 
-    @GetMapping(path = "/{id}", produces = ApiMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 buscarPorId(@PathVariable Long id) {
         return assemblerV2.toModel(service.buscarPorId(id));
     }
 
-    @PostMapping(produces = ApiMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 salvar(@RequestBody @Valid CidadeRequestV2 requestV2) {
         try {
             var cidade = assemblerV2.toEntity(requestV2);
@@ -45,7 +46,7 @@ public class CidadeControllerV2 {
         }
     }
 
-    @PutMapping(path = "/{id}", produces = ApiMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 editar(@PathVariable Long id, @RequestBody @Valid CidadeRequestV2 requestV2) {
         try {
             var cidadeAtual = service.buscarPorId(id);
@@ -56,7 +57,7 @@ public class CidadeControllerV2 {
         }
     }
 
-    @DeleteMapping(value = "/{id}", produces = ApiMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
         var cidade = service.buscarPorId(id);

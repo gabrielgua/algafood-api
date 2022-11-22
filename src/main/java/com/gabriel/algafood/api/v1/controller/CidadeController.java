@@ -21,23 +21,23 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("cidades")
+@RequestMapping("/v1/cidades")
 public class CidadeController implements CidadeControllerOpenApi {
 
     private CidadeService service;
     private CidadeAssembler assembler;
 
-    @GetMapping(produces = ApiMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
-    @GetMapping(path = "/{id}", produces = ApiMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
-    @PostMapping(produces = ApiMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel salvar(@RequestBody @Valid CidadeRequest request) {
         try {
@@ -51,7 +51,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping(path = "/{id}", produces = ApiMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel editar(@RequestBody @Valid CidadeRequest request, @PathVariable Long id) {
         try {
             Cidade cidadeAtual = service.buscarPorId(id);
