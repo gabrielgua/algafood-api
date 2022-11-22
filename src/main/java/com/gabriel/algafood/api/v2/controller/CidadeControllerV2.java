@@ -4,7 +4,7 @@ import com.gabriel.algafood.api.ResourceUriHelper;
 import com.gabriel.algafood.api.v2.assembler.CidadeAssemblerV2;
 import com.gabriel.algafood.api.v2.model.CidadeModelV2;
 import com.gabriel.algafood.api.v2.model.request.CidadeRequestV2;
-import com.gabriel.algafood.core.web.ApiMediaTypes;
+import com.gabriel.algafood.api.v2.openapi.controller.CidadeControllerOpenApiV2;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.service.CidadeService;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v2/cidades")
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerOpenApiV2 {
 
     private CidadeService service;
     private CidadeAssemblerV2 assemblerV2;

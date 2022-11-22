@@ -5,6 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gabriel.algafood.api.exceptionhandler.Problem;
 import com.gabriel.algafood.api.v1.model.*;
 import com.gabriel.algafood.api.v1.openapi.model.*;
+import com.gabriel.algafood.api.v2.model.CidadeModelV2;
+import com.gabriel.algafood.api.v2.model.CozinhaModelV2;
+import com.gabriel.algafood.api.v2.openapi.model.CidadesModelOpenApiV2;
+import com.gabriel.algafood.api.v2.openapi.model.CozinhasModelOpenApiV2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,25 +40,16 @@ import java.util.function.Consumer;
 public class SpringFoxConfig {
 
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
         var typeResolver = new TypeResolver();
 
         return new Docket(DocumentationType.OAS_30)
+                .groupName("v1")
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.gabriel.algafood.api"))
-                    .paths(PathSelectors.any())
-//                   .paths(PathSelectors.ant("/restaurantes/*"), PathSelectors.ant("/cidades/**"))
+                    .paths(PathSelectors.ant("/v1/**"))
                     .build()
                 .useDefaultResponseMessages(false)
-//                .globalRequestParameters(Collections.singletonList(
-//                        new RequestParameterBuilder()
-//                                .name("campos")
-//                                .description("Nomes das propriedades para filtrar na resposta, separados por vírgula")
-//                                .in(ParameterType.QUERY)
-//                                .required(true)
-//                                .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
-//                                .build()
-//                ))
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
                 .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
@@ -95,7 +90,7 @@ public class SpringFoxConfig {
                                 typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                                 UsuariosModelOpenApi.class)
                 )
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(
                         new Tag("Cidades", "Gerencia as Cidades"),
                         new Tag("Grupos", "Gerencia os Grupos"),
@@ -108,6 +103,41 @@ public class SpringFoxConfig {
                         new Tag("Usuários", "Gerencia os Usuários"),
                         new Tag("Estatísticas", "Estatísticas da Algafood"),
                         new Tag("Permissões", "Gerencia as Permissões"));
+    }
+
+    @Bean
+    public Docket apiDocketV2() {
+        var typeResolver = new TypeResolver();
+
+        return new Docket(DocumentationType.OAS_30)
+                .groupName("v2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.gabriel.algafood.api"))
+                .paths(PathSelectors.ant("/v2/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .ignoredParameterTypes(ServletWebRequest.class)
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .apiInfo(apiInfoV2())
+                .alternateTypeRules(
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                                CidadesModelOpenApiV2.class),
+                        AlternateTypeRules.newRule(
+                                typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                                CozinhasModelOpenApiV2.class
+                        )
+                )
+                .tags(
+                        new Tag("Cidades", "Responsável por gerenciar as Cidades"),
+                        new Tag("Cozinhas", "Responsável por gerenciar as Cozinhas")
+                );
     }
 
     private List<Response> globalGetResponseMessages() {
@@ -169,11 +199,20 @@ public class SpringFoxConfig {
         );
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("Algafood API")
                 .description("API aberta para clientes e restaurantes.")
                 .version("1")
+                .contact(new Contact("@gabrielgua", "https://github.com/gabrielgua", "gabriel.guaita45@gmail.com"))
+                .build();
+    }
+
+    private ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("Algafood API")
+                .description("API aberta para clientes e restaurantes.")
+                .version("2")
                 .contact(new Contact("@gabrielgua", "https://github.com/gabrielgua", "gabriel.guaita45@gmail.com"))
                 .build();
     }
