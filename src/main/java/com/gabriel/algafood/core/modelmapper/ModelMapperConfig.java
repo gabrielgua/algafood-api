@@ -20,9 +20,6 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(CidadeRequestV2.class, Cidade.class)
                 .addMappings(mapper -> mapper.skip(Cidade::setId));
 
-//        modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
-//                .addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
-
         modelMapper.createTypeMap(ItemPedidoRequest.class, ItemPedido.class)
                 .addMappings(mapper -> mapper.skip(ItemPedido::setId));
 
