@@ -23,6 +23,7 @@ public class RootEntryPointControllerV2 {
         var rootEntryPointModelV2 = new RootEntryPointModelV2();
 
         rootEntryPointModelV2.add(linksV2.linkToCidades("cidades"));
+        rootEntryPointModelV2.add(linksV2.linkToCozinhas("cozinhas"));
 
         return rootEntryPointModelV2;
     }
