@@ -8,6 +8,7 @@ import com.gabriel.algafood.domain.exception.EntidadeEmUsoException;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
@@ -33,6 +34,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 @AllArgsConstructor
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -54,6 +56,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
         Problem problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(detail).build();
+        log.error(ex.getMessage(), ex);
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 

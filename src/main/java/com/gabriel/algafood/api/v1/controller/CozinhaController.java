@@ -7,6 +7,8 @@ import com.gabriel.algafood.api.v1.openapi.controller.CozinhaControllerOpenApi;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.service.CozinhaService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +29,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     private CozinhaService service;
     private CozinhaAssembler assembler;
 
+
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+
         Page<Cozinha> cozinhasPage = service.listar(pageable);
         PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage, assembler);
 

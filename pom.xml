@@ -20,6 +20,7 @@
 		<jasperreports.version>6.20.0</jasperreports.version>
 		<aws-s3.version>1.12.338</aws-s3.version>
 		<springfox.version>3.0.0</springfox.version>
+		<loggly.version>0.1.5</loggly.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -125,6 +126,11 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-loggly</artifactId>
+			<version>${loggly.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -27,7 +27,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeService service;
     private CidadeAssembler assembler;
 
-    @Deprecated
+//    @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModel> listar() {
         return assembler.toCollectionModel(service.listar());
