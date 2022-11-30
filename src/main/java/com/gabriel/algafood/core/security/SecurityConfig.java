@@ -14,6 +14,6 @@ public class SecurityConfig {
 
     public Long getUsuarioId() {
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-        return jwt.getClaim("usuario_id");
+        return Long.valueOf(jwt.getClaim("usuario_id"));
     }
 }
