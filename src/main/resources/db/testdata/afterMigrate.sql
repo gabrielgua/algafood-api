@@ -76,13 +76,14 @@ insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secret
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'João da Silva', 'joao.ger@algafood.com', '123123', utc_timestamp),
-(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123123', utc_timestamp),
-(3, 'José Souza', 'jose.aux@algafood.com', '123123', utc_timestamp),
-(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123123', utc_timestamp),
-(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123123', utc_timestamp),
-(6, 'Débora Mendonça', 'dev.gabriel69+debora@gmail.com', '123123', utc_timestamp),
-(7, 'Carlos Lima', 'dev.gabriel69+carlos@gmail.com', '123123', utc_timestamp);
+(1, 'João da Silva', 'joao.ger@algafood.com', '$2a$12$JU1NvRHiALTtj3NaaAO8Zu/Gje5D3EWdkrE5fgFTVLVMPOQeZ.iWy', utc_timestamp),
+(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '$2a$12$5nUcML389bwK9GwdbhYX7e6cfkXOT0U1hD3u9fQhTwQ4uGrgWuukG', utc_timestamp),
+(3, 'José Souza', 'jose.aux@algafood.com', '$2a$12$b9lPThHlusUw7nN3W5QYTeULtki8Ci4SKNDGxuNojxu/EI2Q/T//e', utc_timestamp),
+(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '$2a$12$X7fLKZRGf9aX3jeUiYKm1eNh7gN4WfgBaZL/zDaj6KuEjZ/q6HZG6', utc_timestamp),
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2a$12$M5i8pRGbSTxKaTBs5TC7ZOGwPY5NjgdKhhnnocD3dts9qIJ240S7S', utc_timestamp),
+(6, 'Débora Mendonça', 'dev.gabriel69+debora@gmail.com', '$2a$12$wnQVTqwHkZxR49IHUeIyoOiAa5Q30njhiOVF00LQu.x7okAqtq3oO', utc_timestamp),
+(7, 'Carlos Lima', 'dev.gabriel69+carlos@gmail.com', '$2a$12$rdNo/hiM4wONLUAO18B2WexCq3j7vqtsy2tsg46ECBAMKj4zDi1b.', utc_timestamp),
+(8, 'Gabriel Guaitanele', 'admin@algafood.com', '$2a$12$x7f/i7omQq/XcrG8bTI6BuPhBoTq5hrxBgt851.jWuRaPGJKVPLLW', utc_timestamp);
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);
@@ -134,7 +135,9 @@ insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagame
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
 	                status, data_criacao, data_confirmacao, data_entrega, subtotal, taxa_frete, valor_total)
 values (5, '8d774bcf-b238-42f3-aef1-5fb388754d63', 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins',
-        'ENTREGUE', '2019-11-03 02:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2);
+        'ENREGUE', '2019-11-03 02:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2);
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 values (6, 5, 3, 1, 87.2, 87.2, null);
+
+
