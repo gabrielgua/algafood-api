@@ -8,6 +8,7 @@ import com.gabriel.algafood.api.v1.model.request.PedidoRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.PedidoControllerModelOpenApi;
 import com.gabriel.algafood.core.data.PageWrapper;
 import com.gabriel.algafood.core.data.PageableTranslator;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.model.Pedido;
@@ -37,6 +38,8 @@ public class PedidoController implements PedidoControllerModelOpenApi {
     private PedidoAssembler assembler;
     private PedidoResumoAssembler resumoAssembler;
 
+    private SecurityConfig securityConfig;
+
     @Autowired
     private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
@@ -62,9 +65,8 @@ public class PedidoController implements PedidoControllerModelOpenApi {
         try {
             Pedido pedido = assembler.toEntity(request);
 
-            //usuario autenticado implementar
             pedido.setCliente(new Usuario());
-            pedido.getCliente().setId(1L);
+            pedido.getCliente().setId(securityConfig.getUsuarioId());
 
             return assembler.toModel(service.salvar(pedido));
         } catch (EntidadeNaoEncontradaException ex) {
