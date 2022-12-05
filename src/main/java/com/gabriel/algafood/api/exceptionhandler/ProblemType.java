@@ -12,7 +12,8 @@ public enum ProblemType {
     TIPO_DE_CONTEUDO_NAO_SUPORTADO("/tipo-de-conteudo-nao-suportado", "Tipo de conteúdo não suportado"),
     PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro Inválido"),
     ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema"),
-    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos");
+    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos"),
+    ACESSO_NEGADO("/acesso-negado", "Acesso Negado");
 
     private String title;
     private String uri;

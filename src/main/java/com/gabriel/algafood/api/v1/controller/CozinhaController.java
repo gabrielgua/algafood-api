@@ -17,6 +17,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,11 +30,10 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     private CozinhaService service;
     private CozinhaAssembler assembler;
 
-
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 
@@ -41,14 +41,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage, assembler);
 
         return cozinhasPagedModel;
-
     }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaModel adicionar(@RequestBody @Valid CozinhaRequest request) {
@@ -56,6 +56,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return assembler.toModel(service.salvar(cozinha));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaModel editar(@RequestBody @Valid CozinhaRequest request, @PathVariable Long id) {
         Cozinha cozinha = service.buscarPorId(id);
@@ -63,6 +64,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return assembler.toModel(service.salvar(cozinha));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
