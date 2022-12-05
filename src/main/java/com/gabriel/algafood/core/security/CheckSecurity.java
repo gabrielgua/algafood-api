@@ -13,12 +13,12 @@ public @interface CheckSecurity {
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+        @PreAuthorize("hasAuthority('EDITAR_COZINHAS') and hasAuthority('SCOPE_WRITE')")
         public @interface PodeEditar {}
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @PreAuthorize("isAuthenticated()")
+        @PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
         public @interface PodeConsultar {}
 
 
