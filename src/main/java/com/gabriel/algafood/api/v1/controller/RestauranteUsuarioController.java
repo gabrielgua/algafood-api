@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.assembler.UsuarioAssembler;
 import com.gabriel.algafood.api.v1.model.UsuarioModel;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteUsuarioControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 
     private ApiLinks links;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
@@ -37,7 +39,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 
         return usuariosModel;
     }
-
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> vincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
@@ -45,6 +47,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> desvincularResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {

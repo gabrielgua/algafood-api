@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.v1.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     private FormaPagamentoAssembler assembler;
     private ApiLinks links;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = service.buscarPorId(restauranteId);
@@ -39,6 +41,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         return formasPagamentoModel;
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> desvincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
@@ -46,6 +49,8 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         return ResponseEntity.noContent().build();
     }
 
+
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> vincular(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {

@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.assembler.ProdutoAssembler;
 import com.gabriel.algafood.api.v1.model.ProdutoModel;
 import com.gabriel.algafood.api.v1.model.request.ProdutoRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Produto;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import com.gabriel.algafood.domain.service.RestauranteService;
@@ -26,6 +27,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private ProdutoAssembler assembler;
     private ApiLinks links;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
@@ -33,6 +35,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(links.linkToProdutos(restauranteId));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoModel buscarPorId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
@@ -41,6 +44,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoRequest request) {
@@ -50,6 +54,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toModel(produtoService.salvar(produto));
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoModel editar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoRequest request) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
@@ -58,6 +63,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toModel(produtoService.salvar(produto));
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{produtoId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void ativarOuInativar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -65,6 +71,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         produtoService.ativarOuInativar(restaurante.getId(), produtoId);
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(params = "view=ativos", produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoModel> listarAtivos(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);
@@ -72,6 +79,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toCollectionModel(produtosAtivos);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @GetMapping(params = "view=inativos", produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoModel> listarInativos(@PathVariable Long restauranteId) {
         var restaurante = restauranteService.buscarPorId(restauranteId);

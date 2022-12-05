@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.assembler.FotoProdutoAssembler;
 import com.gabriel.algafood.api.v1.model.FotoProdutoModel;
 import com.gabriel.algafood.api.v1.model.request.FotoProdutoRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.service.FotoProdutoService;
@@ -34,6 +35,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     private ProdutoService produtoService;
     private FotoProdutoAssembler assembler;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public FotoProdutoModel buscarPorId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         var fotoProduto = fotoProdutoService.buscarPorId(restauranteId, produtoId);
@@ -68,7 +70,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
             return ResponseEntity.notFound().build();
         }
     }
-
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public FotoProdutoModel atualizarFoto(
             @PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) throws IOException {
@@ -86,6 +88,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return assembler.toModel(fotoProdutoService.salvar(foto, arquivo.getInputStream()));
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
