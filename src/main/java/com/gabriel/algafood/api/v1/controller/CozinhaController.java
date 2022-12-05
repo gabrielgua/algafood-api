@@ -4,11 +4,10 @@ import com.gabriel.algafood.api.v1.assembler.CozinhaAssembler;
 import com.gabriel.algafood.api.v1.model.CozinhaModel;
 import com.gabriel.algafood.api.v1.model.request.CozinhaRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.service.CozinhaService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +32,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-    @PreAuthorize("isAuthenticated()")
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 
@@ -42,13 +41,15 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
         return cozinhasPagedModel;
     }
-    @PreAuthorize("isAuthenticated()")
+
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+
+    @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaModel adicionar(@RequestBody @Valid CozinhaRequest request) {
@@ -56,7 +57,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return assembler.toModel(service.salvar(cozinha));
     }
 
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaModel editar(@RequestBody @Valid CozinhaRequest request, @PathVariable Long id) {
         Cozinha cozinha = service.buscarPorId(id);
@@ -64,7 +65,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return assembler.toModel(service.salvar(cozinha));
     }
 
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
