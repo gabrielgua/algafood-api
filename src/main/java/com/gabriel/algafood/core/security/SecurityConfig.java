@@ -23,7 +23,6 @@ public class SecurityConfig {
     }
 
     public boolean gerenciaRestaurante(Long restauranteId) {
-        System.out.println(restauranteId);
         return repository.isResponsavel(restauranteId, getUsuarioId());
     }
 }

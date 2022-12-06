@@ -44,7 +44,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toModel(produto);
     }
 
-    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoRequest request) {
@@ -54,7 +54,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return assembler.toModel(produtoService.salvar(produto));
     }
 
-    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoModel editar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoRequest request) {
         var restaurante = restauranteService.buscarPorId(restauranteId);

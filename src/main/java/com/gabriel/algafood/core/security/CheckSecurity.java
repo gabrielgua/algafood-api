@@ -37,7 +37,7 @@ public @interface CheckSecurity {
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTE') or @securityConfig.gerenciaRestaurante(#id)")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES') or @securityConfig.gerenciaRestaurante(#restauranteId)")
         public @interface PodeGerenciarFuncionamento {}
     }
 }
