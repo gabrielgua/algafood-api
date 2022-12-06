@@ -52,5 +52,12 @@ public @interface CheckSecurity {
                 "or @securityConfig.gerenciaRestaurante(returnObject.restaurante.id)")
         public @interface PodeBuscar {}
 
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_PEDIDOS') " +
+                "or @securityConfig.gerenciaRestaurante(#filter.restauranteId) " +
+                "or @securityConfig.getUsuarioId == #filter.clienteId")
+        public @interface PodePesquisar {}
+
     }
 }
