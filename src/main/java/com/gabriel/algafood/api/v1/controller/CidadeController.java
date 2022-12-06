@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.assembler.CidadeAssembler;
 import com.gabriel.algafood.api.v1.model.CidadeModel;
 import com.gabriel.algafood.api.v1.model.request.CidadeRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.core.web.ApiMediaTypes;
 import com.gabriel.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
@@ -27,17 +28,20 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeService service;
     private CidadeAssembler assembler;
 
-//    @Deprecated
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
+
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel salvar(@RequestBody @Valid CidadeRequest request) {
@@ -52,6 +56,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel editar(@RequestBody @Valid CidadeRequest request, @PathVariable Long id) {
         try {
@@ -63,6 +68,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {

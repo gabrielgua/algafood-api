@@ -7,6 +7,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 
 public @interface CheckSecurity {
 
@@ -84,4 +85,31 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
         public @interface PodeEditar {}
     }
+
+    public @interface Cidades {
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        public @interface PodeConsultar {}
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_CIDADES')")
+        public @interface PodeEditar {}
+    }
+
+    public @interface Estados {
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        public @interface PodeConsultar {}
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_ESTADOS')")
+        public @interface PodeEditar {}
+    }
+
 }
