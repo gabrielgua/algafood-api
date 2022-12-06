@@ -23,7 +23,8 @@ public class SecurityConfig {
 
     public Long getUsuarioId() {
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-        return Long.valueOf(jwt.getClaimAsString("usuario_id"));
+
+        return jwt.getClaim("usuario_id");
     }
 
     public boolean gerenciaRestaurante(Long restauranteId) {
@@ -33,6 +34,10 @@ public class SecurityConfig {
 
     public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
         return pedidoRepository.isResponsavelPorPedido(codigoPedido, getUsuarioId());
+    }
+
+    public boolean usuarioAutenticadoIgual(Long usuarioId) {
+        return getUsuarioId() != null && usuarioId != null && getUsuarioId().equals(usuarioId);
     }
 
 }

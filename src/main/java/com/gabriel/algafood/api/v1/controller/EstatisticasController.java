@@ -34,7 +34,6 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     public EstatisticaModel mostrarLinks() {
         var estatisticasModel = new EstatisticaModel();
         estatisticasModel.add(links.linkToEstatisticasVendasDiarias("vendas-diarias"));
-
         return estatisticasModel;
     }
 

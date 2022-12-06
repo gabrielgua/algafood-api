@@ -48,7 +48,7 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') " +
-                "or @securityConfig.getUsuarioId() == returnObject.cliente.id " +
+                "or @securityConfig.usuarioAutenticadoIgual(returnObject.cliente.id)" +
                 "or @securityConfig.gerenciaRestaurante(returnObject.restaurante.id)")
         public @interface PodeBuscar {}
 
@@ -56,7 +56,7 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_PEDIDOS') " +
                 "or @securityConfig.gerenciaRestaurante(#filter.restauranteId) " +
-                "or @securityConfig.getUsuarioId() == #filter.clienteId")
+                "or @securityConfig.usuarioAutenticadoIgual(#filter.clienteId)")
         public @interface PodePesquisar {}
 
         @Retention(RetentionPolicy.RUNTIME)
@@ -115,13 +115,13 @@ public @interface CheckSecurity {
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @PreAuthorize("@securityConfig.getUsuarioId() == #usuarioId")
+        @PreAuthorize("@securityConfig.usuarioAutenticadoIgual(#usuarioId)")
         public @interface PodeAlterarPropriaSenha {}
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') " +
-                "or @securityConfig.getUsuarioId() == #usuarioId")
+                "or @securityConfig.usuarioAutenticadoIgual(#usuarioId)")
         public @interface PodeAlterarUsuario {}
 
         @Retention(RetentionPolicy.RUNTIME)
@@ -137,7 +137,7 @@ public @interface CheckSecurity {
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES') " +
-                "or @securityConfig.getUsuarioId() == #usuarioId")
+                "or @securityConfig.usuarioAutenticadoIgual(#usuarioId)")
         public @interface PodeConsultarUsuario {}
 
         @Retention(RetentionPolicy.RUNTIME)
