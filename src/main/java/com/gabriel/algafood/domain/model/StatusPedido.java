@@ -13,7 +13,6 @@ public enum StatusPedido {
     ENTREGUE("Entregue", CONFIRMADO),
     CANCELADO("Cancelado", CRIADO);
 
-
     private String descricao;
     private List<StatusPedido> statusAnteriores;
 

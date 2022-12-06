@@ -1,5 +1,6 @@
 package com.gabriel.algafood.core.security;
 
+import com.gabriel.algafood.domain.repository.PedidoRepository;
 import com.gabriel.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig {
 
     @Autowired
-    private RestauranteRepository repository;
+    private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
@@ -24,8 +28,11 @@ public class SecurityConfig {
 
     public boolean gerenciaRestaurante(Long restauranteId) {
         if (restauranteId == null) return false;
+        return restauranteRepository.isResponsavel(restauranteId, getUsuarioId());
+    }
 
-        return repository.isResponsavel(restauranteId, getUsuarioId());
+    public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
+        return pedidoRepository.isResponsavelPorPedido(codigoPedido, getUsuarioId());
     }
 
 }

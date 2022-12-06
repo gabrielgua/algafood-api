@@ -62,6 +62,7 @@ public class PedidoController implements PedidoControllerModelOpenApi {
         return assembler.toModel(service.buscarPorId(codigoPedido));
     }
 
+    @CheckSecurity.Pedidos.PodeCriar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoModel salvar(@RequestBody @Valid PedidoRequest request) {
