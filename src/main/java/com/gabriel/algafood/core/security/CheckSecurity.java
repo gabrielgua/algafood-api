@@ -1,5 +1,6 @@
 package com.gabriel.algafood.core.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -39,5 +40,17 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES') or @securityConfig.gerenciaRestaurante(#restauranteId)")
         public @interface PodeGerenciarFuncionamento {}
+    }
+
+    public @interface Pedidos {
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') " +
+                "or @securityConfig.getUsuarioId() == returnObject.cliente.id " +
+                "or @securityConfig.gerenciaRestaurante(returnObject.restaurante.id)")
+        public @interface PodeBuscar {}
+
     }
 }

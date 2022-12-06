@@ -8,6 +8,7 @@ import com.gabriel.algafood.api.v1.model.request.PedidoRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.PedidoControllerModelOpenApi;
 import com.gabriel.algafood.core.data.PageWrapper;
 import com.gabriel.algafood.core.data.PageableTranslator;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.gabriel.algafood.domain.exception.NegocioException;
@@ -54,6 +55,7 @@ public class PedidoController implements PedidoControllerModelOpenApi {
     }
 
 
+    @CheckSecurity.Pedidos.PodeBuscar
     @GetMapping(path = "/{codigoPedido}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PedidoModel buscarPorId(@PathVariable String codigoPedido) {
         return assembler.toModel(service.buscarPorId(codigoPedido));

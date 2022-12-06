@@ -25,4 +25,5 @@ public class SecurityConfig {
     public boolean gerenciaRestaurante(Long restauranteId) {
         return repository.isResponsavel(restauranteId, getUsuarioId());
     }
+
 }
