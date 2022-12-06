@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.assembler.PermissaoAssembler;
 import com.gabriel.algafood.api.v1.model.PermissaoModel;
 import com.gabriel.algafood.api.v1.openapi.controller.PermissaoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.service.PermissaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -19,9 +20,9 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 
     private PermissaoService service;
     private PermissaoAssembler assembler;
-    private ApiLinks links;
 
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoModel> listar() {
         return assembler.toCollectionModel(service.listar());

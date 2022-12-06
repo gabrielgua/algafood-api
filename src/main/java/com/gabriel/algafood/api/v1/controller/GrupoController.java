@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.assembler.GrupoAssembler;
 import com.gabriel.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
 import com.gabriel.algafood.api.v1.model.GrupoModel;
 import com.gabriel.algafood.api.v1.model.request.GrupoRequest;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
@@ -22,16 +23,19 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoService service;
     private GrupoAssembler assembler;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GrupoModel> listar() {
         return assembler.toCollectionModel(service.listar());
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel buscarPorId(@PathVariable Long id) {
         return assembler.toModel(service.buscarPorId(id));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoModel salvar(@RequestBody @Valid GrupoRequest request) {
@@ -39,6 +43,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return assembler.toModel(service.salvar(grupo));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel editar(@PathVariable Long id, @RequestBody @Valid GrupoRequest request) {
         Grupo grupo = service.buscarPorId(id);
@@ -46,6 +51,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return assembler.toModel(service.salvar(grupo));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {

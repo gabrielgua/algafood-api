@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.assembler.PermissaoAssembler;
 import com.gabriel.algafood.api.v1.model.PermissaoModel;
 import com.gabriel.algafood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     private PermissaoAssembler permissaoAssembler;
     private ApiLinks links;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoModel> listarPermissoes(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarPorId(grupoId);
@@ -34,12 +36,14 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
         return permissoesModel;
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{permissaoId}")
     public ResponseEntity<Void> vincularPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.vincularPermissao(grupoId, permissaoId);
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{permissaoId}")
     public ResponseEntity<Void> desvincularPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.desvincularPermissao(grupoId, permissaoId);
