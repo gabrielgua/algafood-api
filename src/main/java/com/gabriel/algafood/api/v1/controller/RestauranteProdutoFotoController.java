@@ -70,7 +70,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
             return ResponseEntity.notFound().build();
         }
     }
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public FotoProdutoModel atualizarFoto(
             @PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) throws IOException {
@@ -88,7 +88,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return assembler.toModel(fotoProdutoService.salvar(foto, arquivo.getInputStream()));
     }
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {

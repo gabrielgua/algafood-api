@@ -28,11 +28,16 @@ public @interface CheckSecurity {
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("hasAuthority('EDITAR_RESTAURANTES') and hasAuthority('SCOPE_WRITE')")
-        public @interface PodeEditar {}
+        public @interface PodeGerenciarCadastro {}
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
         public @interface PodeConsultar {}
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTE') or @securityConfig.gerenciaRestaurante(#id)")
+        public @interface PodeGerenciarFuncionamento {}
     }
 }
