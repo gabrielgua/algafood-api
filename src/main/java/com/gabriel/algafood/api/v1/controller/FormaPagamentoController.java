@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.v1.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.v1.model.request.FormaPagamentoRequest;
 import com.gabriel.algafood.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.gabriel.algafood.core.security.CheckSecurity;
 import com.gabriel.algafood.domain.model.FormaPagamento;
 import com.gabriel.algafood.domain.repository.FormaPagamentoRepository;
 import com.gabriel.algafood.domain.service.FormaPagamentoService;
@@ -31,6 +32,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
 
     //Implementação de Deep ETags
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -51,6 +53,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formasPagamentoModel);
     }
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoModel> buscarPorId(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -71,6 +74,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoModel);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel salvar(@RequestBody @Valid FormaPagamentoRequest request) {
@@ -78,6 +82,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return assembler.toModel(service.salvar(formaPagamento));
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoModel editar(@PathVariable Long id,@RequestBody @Valid FormaPagamentoRequest request) {
         var formaPagamento = service.buscarPorId(id);
@@ -85,6 +90,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return assembler.toModel(service.salvar(formaPagamento));
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
         service.remover(id);
