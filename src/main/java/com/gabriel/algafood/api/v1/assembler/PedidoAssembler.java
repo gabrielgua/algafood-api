@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.PedidoController;
 import com.gabriel.algafood.api.v1.model.PedidoModel;
 import com.gabriel.algafood.api.v1.model.request.PedidoRequest;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
 
     @Autowired
     private ApiLinks links;
+
+    @Autowired
+    private SecurityConfig securityConfig;
 
     public PedidoAssembler() {
         super(PedidoController.class, PedidoModel.class);
@@ -34,18 +38,20 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
         var cidadeId = pedidoModel.getEnderecoEntrega().getCidade().getId();
 
 
-        pedidoModel.add(links.linkToPedidos());
+        pedidoModel.add(links.linkToPedidos("pedidos"));
 
-        if (pedido.podeSerConfirmado()) {
-            pedidoModel.add(links.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
-        }
+        if (securityConfig.podeGerenciarPedidos(pedido.getCodigo())) {
+            if (pedido.podeSerConfirmado()) {
+                pedidoModel.add(links.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+            }
 
-        if (pedido.podeSerCancelado()) {
-            pedidoModel.add(links.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
-        }
+            if (pedido.podeSerCancelado()) {
+                pedidoModel.add(links.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
+            }
 
-        if (pedido.podeSerEntregue()) {
-            pedidoModel.add(links.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
+            if (pedido.podeSerEntregue()) {
+                pedidoModel.add(links.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
+            }
         }
 
         pedidoModel.getFormaPagamento().add(links.linkToFormaPagamento(formaPagamentoId));

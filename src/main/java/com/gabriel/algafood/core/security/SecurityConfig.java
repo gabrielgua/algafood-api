@@ -40,4 +40,14 @@ public class SecurityConfig {
         return getUsuarioId() != null && usuarioId != null && getUsuarioId().equals(usuarioId);
     }
 
+    public boolean hasAuthority(String authority) {
+        return getAuthentication().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals(authority));
+    }
+
+    public boolean podeGerenciarPedidos(String codigoPedido) {
+        return hasAuthority("SCOPE_WRITE") && (hasAuthority("GERENCIAR_PEDIDOS")
+                || gerenciaRestauranteDoPedido(codigoPedido));
+    }
+
 }
