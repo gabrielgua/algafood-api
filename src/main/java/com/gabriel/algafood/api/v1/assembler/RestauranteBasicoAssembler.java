@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.v1.assembler;
 import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.RestauranteController;
 import com.gabriel.algafood.api.v1.model.RestauranteBasicoModel;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class RestauranteBasicoAssembler extends RepresentationModelAssemblerSupp
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public RestauranteBasicoAssembler() {
         super(RestauranteController.class, RestauranteBasicoModel.class);
     }
@@ -31,15 +35,22 @@ public class RestauranteBasicoAssembler extends RepresentationModelAssemblerSupp
 
         var cozinhaId = restaurante.getCozinha().getId();
 
-        restauranteBasicoModel.add(links.linkToRestaurantes("restaurantes"));
-        restauranteBasicoModel.getCozinha().add(links.linkToCozinha(cozinhaId));
+        if (securityConfig.podeConsultarRestaurantes()) {
+            restauranteBasicoModel.add(links.linkToRestaurantes("restaurantes"));
+            restauranteBasicoModel.getCozinha().add(links.linkToCozinha(cozinhaId));
+        }
 
         return restauranteBasicoModel;
     }
 
     @Override
     public CollectionModel<RestauranteBasicoModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToRestaurantes());
+        var collectionModel = super.toCollectionModel(entities);
+
+        if (securityConfig.podeConsultarRestaurantes()) {
+            collectionModel.add(links.linkToRestaurantes("restaurantes"));
+        }
+
+        return collectionModel;
     }
 }

@@ -148,7 +148,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         service.fecharRestaurante(restauranteId);
         return ResponseEntity.noContent().build();
     }
-    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping("/{restauranteId}/abertura-ou-fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void abrirOuFecharRestaurante(@PathVariable Long restauranteId) {

@@ -38,8 +38,8 @@ public class FormaPagamentoService {
             var formaPagamento = buscarPorId(id);
             repository.delete(formaPagamento);
             repository.flush();
-//        } catch (EmptyResultDataAccessException ex) {
-//            throw new EntidadeNaoEncontradaException(ex.getMessage());
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntidadeNaoEncontradaException(ex.getMessage());
         } catch (DataIntegrityViolationException ex) {
             throw new EntidadeEmUsoException("Forma de pagamento id: #"+id+" está em uso e não pode ser removida.");
         }

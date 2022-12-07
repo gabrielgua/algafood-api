@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ProblemType {
 
     RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
-    ENTIDADE_EM_USO("/entidade-em-uso", "/Entidade em uso"),
+    ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
     NEGOCIO_ERRO("/negocio-erro", "Violação de regra de negócio"),
     CORPO_NAO_LEGIVEL("/corpo-nao-legivel", "Corpo não legível"),
     TIPO_DE_CONTEUDO_NAO_SUPORTADO("/tipo-de-conteudo-nao-suportado", "Tipo de conteúdo não suportado"),

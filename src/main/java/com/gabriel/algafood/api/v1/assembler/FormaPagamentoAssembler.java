@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.FormaPagamentoController;
 import com.gabriel.algafood.api.v1.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.v1.model.request.FormaPagamentoRequest;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.FormaPagamento;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class FormaPagamentoAssembler extends RepresentationModelAssemblerSupport
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public FormaPagamentoAssembler() {
         super(FormaPagamentoController.class, FormaPagamentoModel.class);
     }
@@ -30,14 +34,19 @@ public class FormaPagamentoAssembler extends RepresentationModelAssemblerSupport
         var formaPagamentoModel = createModelWithId(formaPagamento.getId(), formaPagamento);
         modelMapper.map(formaPagamento, formaPagamentoModel);
 
-        formaPagamentoModel.add(links.linkToFormaPagamentos("formasPagamento"));
+        if (securityConfig.podeConsultarFormasDePagamento()) {
+            formaPagamentoModel.add(links.linkToFormaPagamentos("formasPagamento"));
+        }
         return formaPagamentoModel;
     }
 
     @Override
     public CollectionModel<FormaPagamentoModel> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToFormaPagamentos());
+        var model = super.toCollectionModel(entities);
+        if (securityConfig.podeConsultarFormasDePagamento()) {
+            model.add(links.linkToFormaPagamentos());
+        }
+        return model;
     }
 
     public FormaPagamento toEntity(FormaPagamentoRequest request) {

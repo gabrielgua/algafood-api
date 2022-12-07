@@ -37,7 +37,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return assembler.toModel(service.buscarPorId(usuarioId));
     }
 
-    @CheckSecurity.UsuariosGruposPermissoes.PodeCadastrar
+    @CheckSecurity.UsuariosGruposPermissoes.PodeCadastrarUsuarios
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel salvar(@RequestBody @Valid UsuarioComSenhaRequest request) {

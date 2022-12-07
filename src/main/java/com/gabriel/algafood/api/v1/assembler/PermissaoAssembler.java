@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.v1.assembler;
 import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.PermissaoController;
 import com.gabriel.algafood.api.v1.model.PermissaoModel;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Permissao;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class PermissaoAssembler extends RepresentationModelAssemblerSupport<Perm
 
     @Autowired
     private ApiLinks links;
+    @Autowired
+    private SecurityConfig securityConfig;
 
     public PermissaoAssembler() {
         super(PermissaoController.class, PermissaoModel.class);
@@ -30,7 +33,10 @@ public class PermissaoAssembler extends RepresentationModelAssemblerSupport<Perm
 
     @Override
     public CollectionModel<PermissaoModel> toCollectionModel(Iterable<? extends Permissao> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToPermissoes());
+        var model = super.toCollectionModel(entities);
+        if (securityConfig.podeConsultarUsuariosGruposPermissoes()) {
+            model.add(links.linkToPermissoes());
+        }
+        return model;
     }
 }

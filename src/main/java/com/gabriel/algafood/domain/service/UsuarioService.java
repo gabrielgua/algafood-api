@@ -1,11 +1,14 @@
 package com.gabriel.algafood.domain.service;
 
+import com.gabriel.algafood.domain.exception.EntidadeEmUsoException;
 import com.gabriel.algafood.domain.exception.NegocioException;
 import com.gabriel.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.model.Usuario;
 import com.gabriel.algafood.domain.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,8 +50,16 @@ public class UsuarioService {
 
     @Transactional
     public void remover(Long id) {
-        Usuario usuario = buscarPorId(id);
-        repository.delete(usuario);
+        try {
+            repository.deleteById(id);
+            repository.flush();
+        } catch (EmptyResultDataAccessException ex) {
+            throw new UsuarioNaoEncontradoException(ex.getMessage());
+        } catch (DataIntegrityViolationException ex) {
+            throw new EntidadeEmUsoException("Usuário id: #"+id+" está em uso e não pode ser removido.");
+        }
+
+
     }
 
     @Transactional

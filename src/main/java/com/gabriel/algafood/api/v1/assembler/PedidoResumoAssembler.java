@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.v1.assembler;
 import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.PedidoController;
 import com.gabriel.algafood.api.v1.model.PedidoResumoModel;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,10 @@ public class PedidoResumoAssembler extends RepresentationModelAssemblerSupport<P
 
     @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private ApiLinks links;
+    @Autowired
+    private SecurityConfig securityConfig;
 
     public PedidoResumoAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
@@ -30,9 +32,17 @@ public class PedidoResumoAssembler extends RepresentationModelAssemblerSupport<P
         var restauranteId = pedidoResumoModel.getRestaurante().getId();
         var usuarioId = pedidoResumoModel.getCliente().getId();
 
-        pedidoResumoModel.add(links.linkToPedidos());
-        pedidoResumoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
-        pedidoResumoModel.getCliente().add(links.linkToUsuario(usuarioId));
+        if (securityConfig.podeBuscarPedidos()) {
+            pedidoResumoModel.add(links.linkToPedidos("pedidos"));
+        }
+
+        if (securityConfig.podeConsultarRestaurantes()) {
+            pedidoResumoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
+        }
+
+        if (securityConfig.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoResumoModel.getCliente().add(links.linkToUsuario(usuarioId));
+        }
 
         return pedidoResumoModel;
     }

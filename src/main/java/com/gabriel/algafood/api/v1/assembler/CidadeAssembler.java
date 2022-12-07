@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.CidadeController;
 import com.gabriel.algafood.api.v1.model.CidadeModel;
 import com.gabriel.algafood.api.v1.model.request.CidadeRequest;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.model.Estado;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,9 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public CidadeAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -33,9 +37,14 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
         var cidadeModel = createModelWithId(cidade.getId(), cidade);
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(links.linkToCidades("cidades"));
-        cidadeModel.getEstado().add(links.linkToEstado(cidade.getEstado().getId()));
-        cidadeModel.getEstado().add(links.linkToEstados("estados"));
+        if (securityConfig.podeConsultarCidades()) {
+            cidadeModel.add(links.linkToCidades("cidades"));
+            cidadeModel.getEstado().add(links.linkToEstado(cidade.getEstado().getId()));
+        }
+
+        if (securityConfig.podeConsultarEstados()) {
+            cidadeModel.getEstado().add(links.linkToEstados("estados"));
+        }
 
         return cidadeModel;
     }
@@ -46,9 +55,11 @@ public class CidadeAssembler extends RepresentationModelAssemblerSupport<Cidade,
 
     @Override
     public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
-
-        return super.toCollectionModel(entities)
-                .add(links.linkToCidades());
+        var model = super.toCollectionModel(entities);
+        if (securityConfig.podeConsultarCidades()) {
+            model.add(links.linkToCidades());
+        }
+        return model;
     }
 
     public void copyToEntity (CidadeRequest request, Cidade cidade) {

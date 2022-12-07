@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.RestauranteController;
 import com.gabriel.algafood.api.v1.model.RestauranteModel;
 import com.gabriel.algafood.api.v1.model.request.RestauranteRequest;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Cidade;
 import com.gabriel.algafood.domain.model.Cozinha;
 import com.gabriel.algafood.domain.model.Restaurante;
@@ -22,6 +23,9 @@ public class RestauranteAssembler extends RepresentationModelAssemblerSupport<Re
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public RestauranteAssembler() {
         super(RestauranteController.class, RestauranteModel.class);
     }
@@ -32,38 +36,51 @@ public class RestauranteAssembler extends RepresentationModelAssemblerSupport<Re
         modelMapper.map(restaurante, restauranteModel);
 
         var cozinhaId = restaurante.getCozinha().getId();
-        var cidadeId = restaurante.getEndereco().getCidade().getId();
 
-        restauranteModel.add(links.linkToRestaurantes("restaurantes"));
-        restauranteModel.getCozinha().add(links.linkToCozinha(cozinhaId));
+        if (securityConfig.podeConsultarRestaurantes()) {
+            restauranteModel.add(links.linkToRestaurantes("restaurantes"));
+            restauranteModel.add(links.linkToProdutos(restaurante.getId(), "produtos"));
+            restauranteModel.add(links.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
+            restauranteModel.getCozinha().add(links.linkToCozinha(cozinhaId));
 
-        if (restauranteModel.getEndereco() != null && restauranteModel.getEndereco().getCidade() != null) {
-            restauranteModel.getEndereco().getCidade().add(links.linkToCidade(cidadeId));
+            if (restauranteModel.getEndereco() != null && restauranteModel.getEndereco().getCidade() != null) {
+                var cidadeId = restaurante.getEndereco().getCidade().getId();
+                restauranteModel.getEndereco().getCidade().add(links.linkToCidade(cidadeId));
+            }
         }
 
-        restauranteModel.add(links.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
-        restauranteModel.add(links.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
-        restauranteModel.add(links.linkToProdutos(restaurante.getId(), "produtos"));
+        if (securityConfig.podeGerenciarCadastroRestaurantes()) {
+            restauranteModel.add(links.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
 
-        if (restaurante.ativacaoPermitida()) {
-            restauranteModel.add(links.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+            if (restaurante.ativacaoPermitida()) {
+                restauranteModel.add(links.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+            }
+            if (restaurante.inativacaoPermitida()) {
+                restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "inativar"));
+            }
         }
-        if (restaurante.inativacaoPermitida()) {
-            restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "inativar"));
+
+        if (securityConfig.podeGerenciarFuncionamentoRestaurantes(restaurante.getId())) {
+            if (restaurante.aberturaPermitida()) {
+                restauranteModel.add(links.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+            }
+            if (restaurante.fechamentoPermitido()) {
+                restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+            }
         }
-        if (restaurante.aberturaPermitida()) {
-            restauranteModel.add(links.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
-        }
-        if (restaurante.fechamentoPermitido()) {
-            restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
-        }
+
         return restauranteModel;
     }
 
     @Override
     public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToRestaurantes());
+        var collectionModel = super.toCollectionModel(entities);
+
+        if (securityConfig.podeConsultarRestaurantes()) {
+            collectionModel.add(links.linkToRestaurantes("restaurantes"));
+        }
+
+        return collectionModel;
     }
 
     public Restaurante toEntity(RestauranteRequest request) {

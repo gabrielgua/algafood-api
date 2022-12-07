@@ -4,6 +4,7 @@ import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.UsuarioController;
 import com.gabriel.algafood.api.v1.model.UsuarioModel;
 import com.gabriel.algafood.api.v1.model.request.UsuarioRequest;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public UsuarioAssembler() {
         super(UsuarioController.class, UsuarioModel.class);
     }
@@ -30,8 +34,10 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
         var usuarioModel = createModelWithId(usuario.getId(), usuario);
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(links.linkToUsuarios("usuarios"));
-        usuarioModel.add(links.linkToGruposUsuario(usuario.getId(), "grupos-usuarios"));
+        if (securityConfig.podeConsultarUsuariosGruposPermissoes()) {
+            usuarioModel.add(links.linkToUsuarios("usuarios"));
+            usuarioModel.add(links.linkToGruposUsuario(usuario.getId(), "grupos-usuarios"));
+        }
 
         return usuarioModel;
     }
@@ -42,8 +48,13 @@ public class UsuarioAssembler extends RepresentationModelAssemblerSupport<Usuari
 
     @Override
     public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToUsuarios());
+        var model = super.toCollectionModel(entities);
+
+        if (securityConfig.podeConsultarUsuariosGruposPermissoes()) {
+            model.add(links.linkToUsuarios("usuarios"));
+        }
+
+        return model;
     }
 
     public void copyToEntity(UsuarioRequest request, Usuario usuario) {

@@ -3,6 +3,7 @@ package com.gabriel.algafood.api.v1.assembler;
 import com.gabriel.algafood.api.v1.ApiLinks;
 import com.gabriel.algafood.api.v1.controller.RestauranteController;
 import com.gabriel.algafood.api.v1.model.RestauranteApenasNomeModel;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class RestauranteApenasNomeAssembler extends RepresentationModelAssembler
     @Autowired
     private ApiLinks links;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
     public RestauranteApenasNomeAssembler() {
         super(RestauranteController.class, RestauranteApenasNomeModel.class);
     }
@@ -28,13 +32,21 @@ public class RestauranteApenasNomeAssembler extends RepresentationModelAssembler
         var apenasNome = createModelWithId(restaurante.getId(), restaurante);
         modelMapper.map(restaurante, apenasNome);
 
-        apenasNome.add(links.linkToRestaurantes("restaurantes"));
+        if (securityConfig.podeConsultarRestaurantes()) {
+            apenasNome.add(links.linkToRestaurantes("restaurantes"));
+        }
+
         return apenasNome;
     }
 
     @Override
     public CollectionModel<RestauranteApenasNomeModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(links.linkToRestaurantes());
+        var collectionModel = super.toCollectionModel(entities);
+
+        if (securityConfig.podeConsultarRestaurantes()) {
+            collectionModel.add(links.linkToRestaurantes("restaurantes"));
+        }
+
+        return collectionModel;
     }
 }

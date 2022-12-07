@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.assembler.FormaPagamentoAssembler;
 import com.gabriel.algafood.api.v1.model.FormaPagamentoModel;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.gabriel.algafood.core.security.CheckSecurity;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
@@ -22,20 +23,22 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     private RestauranteService service;
     private FormaPagamentoAssembler assembler;
     private ApiLinks links;
+    private SecurityConfig securityConfig;
 
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = service.buscarPorId(restauranteId);
         var formasPagamentoModel = assembler.toCollectionModel(restaurante.getFormasPagamento())
-                .removeLinks()
-                .add(links.linkToRestauranteFormasPagamento(restauranteId))
-                .add(links.linkToRestauranteVincularFormaPagamento(restauranteId, "vincular"));
+                .removeLinks();
 
-        formasPagamentoModel.getContent().forEach(formaPagamentoModel ->
-                formaPagamentoModel.add(links.linkToRestauranteDesvincularFormaPagamento(restauranteId, formaPagamentoModel.getId(), "desvincular")));
+        formasPagamentoModel.add(links.linkToRestauranteFormasPagamento(restauranteId));
 
-
+        if (securityConfig.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+            formasPagamentoModel.add(links.linkToRestauranteVincularFormaPagamento(restauranteId, "vincular"));
+            formasPagamentoModel.getContent().forEach(formaPagamentoModel ->
+                    formaPagamentoModel.add(links.linkToRestauranteDesvincularFormaPagamento(restauranteId, formaPagamentoModel.getId(), "desvincular")));
+        }
 
         return formasPagamentoModel;
     }

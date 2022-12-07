@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.assembler.UsuarioAssembler;
 import com.gabriel.algafood.api.v1.model.UsuarioModel;
 import com.gabriel.algafood.api.v1.openapi.controller.RestauranteUsuarioControllerOpenApi;
 import com.gabriel.algafood.core.security.CheckSecurity;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Restaurante;
 import com.gabriel.algafood.domain.service.RestauranteService;
 import lombok.AllArgsConstructor;
@@ -21,22 +22,22 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 
     private RestauranteService restauranteService;
     private UsuarioAssembler usuarioAssembler;
-
     private ApiLinks links;
+    private SecurityConfig securityConfig;
 
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listarResponsaveis(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         var usuariosModel = usuarioAssembler.toCollectionModel(restaurante.getResponsaveis())
-                .removeLinks()
-                .add(links.linkToResponsaveisRestaurante(restauranteId))
-                .add(links.linkToRestauranteVincularResponsavel(restauranteId, "vincular"));
+                .removeLinks();
 
-        usuariosModel.getContent().forEach(usuario ->
-                usuario.add(links.linkToRestauranteDesvincularResponsavel(restauranteId, usuario.getId(), "desvincular")));
-
-
+        usuariosModel.add(links.linkToResponsaveisRestaurante(restauranteId));
+        if (securityConfig.podeGerenciarCadastroRestaurantes()) {
+            usuariosModel.add(links.linkToRestauranteVincularResponsavel(restauranteId, "vincular"));
+            usuariosModel.getContent().forEach(usuario ->
+                    usuario.add(links.linkToRestauranteDesvincularResponsavel(restauranteId, usuario.getId(), "desvincular")));
+        }
         return usuariosModel;
     }
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro

@@ -54,11 +54,22 @@ public class PedidoAssembler extends RepresentationModelAssemblerSupport<Pedido,
             }
         }
 
-        pedidoModel.getFormaPagamento().add(links.linkToFormaPagamento(formaPagamentoId));
-        pedidoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
-        pedidoModel.getCliente().add(links.linkToUsuario(usuarioId));
-        pedidoModel.getEnderecoEntrega().getCidade().add(links.linkToCidade(cidadeId));
-        pedidoModel.getItens().forEach(item -> item.add(links.linkToProduto(restauranteId, item.getProdutoId())));
+        if (securityConfig.podeConsultarFormasDePagamento()) {
+            pedidoModel.getFormaPagamento().add(links.linkToFormaPagamento(formaPagamentoId));
+        }
+
+        if (securityConfig.podeConsultarRestaurantes()) {
+            pedidoModel.getRestaurante().add(links.linkToRestaurante(restauranteId));
+            pedidoModel.getItens().forEach(item -> item.add(links.linkToProduto(restauranteId, item.getProdutoId())));
+        }
+
+        if (securityConfig.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoModel.getCliente().add(links.linkToUsuario(usuarioId));
+        }
+
+        if (securityConfig.podeConsultarCidades()) {
+            pedidoModel.getEnderecoEntrega().getCidade().add(links.linkToCidade(cidadeId));
+        }
 
         return pedidoModel;
     }

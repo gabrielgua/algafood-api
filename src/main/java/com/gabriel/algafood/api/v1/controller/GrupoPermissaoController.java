@@ -5,6 +5,7 @@ import com.gabriel.algafood.api.v1.assembler.PermissaoAssembler;
 import com.gabriel.algafood.api.v1.model.PermissaoModel;
 import com.gabriel.algafood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.gabriel.algafood.core.security.CheckSecurity;
+import com.gabriel.algafood.core.security.SecurityConfig;
 import com.gabriel.algafood.domain.model.Grupo;
 import com.gabriel.algafood.domain.service.GrupoService;
 import lombok.AllArgsConstructor;
@@ -21,17 +22,24 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     private PermissaoAssembler permissaoAssembler;
     private ApiLinks links;
 
+    private SecurityConfig securityConfig;
+
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoModel> listarPermissoes(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarPorId(grupoId);
-        var permissoesModel = permissaoAssembler.toCollectionModel(grupo.getPermissoes())
-                .removeLinks()
-                .add(links.linkToGrupoPermissoes(grupoId))
-                .add(links.linkToGrupoVincularPermissao(grupoId, "vincular"));
 
-        permissoesModel.getContent().forEach(permissao ->
-                permissao.add(links.linkToGrupoDesvincularPermissao(grupoId, permissao.getId(), "desvincular")));
+        var permissoesModel = permissaoAssembler.toCollectionModel(grupo.getPermissoes())
+                .removeLinks();
+
+        permissoesModel.add(links.linkToGrupoPermissoes(grupoId));
+
+        if (securityConfig.podeEditarUsuariosGruposPermissoes()) {
+            permissoesModel.add(links.linkToGrupoVincularPermissao(grupoId, "vincular"));
+
+            permissoesModel.getContent().forEach(permissao ->
+                    permissao.add(links.linkToGrupoDesvincularPermissao(grupoId, permissao.getId(), "desvincular")));
+        }
 
         return permissoesModel;
     }
