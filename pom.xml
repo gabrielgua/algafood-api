@@ -22,6 +22,8 @@
 		<springfox.version>3.0.0</springfox.version>
 		<loggly.version>0.1.5</loggly.version>
 		<oauth2-oidc-sdk.version>10.1</oauth2-oidc-sdk.version>
+		<spring-oauth2.version>2.5.2.RELEASE</spring-oauth2.version>
+		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -143,6 +145,16 @@
 			<groupId>com.nimbusds</groupId>
 			<artifactId>oauth2-oidc-sdk</artifactId>
 			<version>${oauth2-oidc-sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>${spring-oauth2.version}</version>
 		</dependency>
 	</dependencies>
 
