@@ -23,10 +23,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Response;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -90,6 +87,7 @@ public class SpringFoxConfig {
                                 typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                                 UsuariosModelOpenApi.class)
                 )
+                .securitySchemes(Arrays.asList(securityScheme()))
                 .apiInfo(apiInfoV1())
                 .tags(
                         new Tag("Cidades", "Gerencia as Cidades"),
@@ -103,6 +101,24 @@ public class SpringFoxConfig {
                         new Tag("Usuários", "Gerencia os Usuários"),
                         new Tag("Estatísticas", "Estatísticas da Algafood"),
                         new Tag("Permissões", "Gerencia as Permissões"));
+    }
+
+    private List<GrantType> grantTypes() {
+        return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("oauth/token"));
+    }
+
+    private List<AuthorizationScope> scopes() {
+        return Arrays.asList(
+                new AuthorizationScope("READ", "Acesso de leitura"),
+                new AuthorizationScope("WRITE", "Acesso de escrita"));
+    }
+
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+                .name("AlgaFood")
+                .grantTypes(grantTypes())
+                .scopes(scopes())
+                .build();
     }
 
     @Bean
