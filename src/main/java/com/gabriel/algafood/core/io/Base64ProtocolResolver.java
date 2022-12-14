@@ -1,19 +1,20 @@
 package com.gabriel.algafood.core.io;
 
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ProtocolResolver;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 import java.util.Base64;
-
-public class Base64ProtocolResolver implements ProtocolResolver, ApplicationListener<ApplicationContextInitializedEvent> {
+@Component
+public class Base64ProtocolResolver implements ProtocolResolver, ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
-    public void onApplicationEvent(ApplicationContextInitializedEvent event) {
-        event.getApplicationContext().addProtocolResolver(this);
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        applicationContext.addProtocolResolver(this);
     }
 
     @Override
