@@ -43,9 +43,7 @@ public class AuthorizationServerConfig {
 //        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
-
         authorizationServerConfigurer.authorizationEndpoint(customizer -> customizer.consentPage("/oauth2/consent"));
-
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
 
         http.requestMatcher(endpointsMatcher).authorizeRequests((authorizeRequests) -> {
@@ -54,9 +52,8 @@ public class AuthorizationServerConfig {
             csrf.ignoringRequestMatchers(new RequestMatcher[]{endpointsMatcher});
         }).apply(authorizationServerConfigurer);
 
-
-        http.formLogin(customizer -> customizer.loginPage("/login"));
-        return http.build();
+        http.logout(logout -> logout.deleteCookies("JSESSIONID"));
+        return http.formLogin(customizer -> customizer.loginPage("/login")).build();
     }
 
     @Bean

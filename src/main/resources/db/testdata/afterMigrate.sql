@@ -17,6 +17,8 @@ delete from pedido;
 delete from item_pedido;
 delete from foto_produto;
 delete from oauth2_registered_client;
+delete from oauth2_authorization;
+delete from oauth2_authorization_consent;
 
 set foreign_key_checks = 1;
 

@@ -2,7 +2,6 @@ package com.gabriel.algafood.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,10 +21,25 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 public class ResourceServerConfig {
 
+    private static final String[] AUTH_WHITELIST = {
+// -- Swagger UI v2
+            "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
+            "/configuration/security", "/swagger-ui.html", "/webjars/**",
+// -- Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**", "/swagger-ui/**", "/actuator/**",
+// -- API
+            "/login", "/logout", "/oauth2/logout" };
+
     @Bean
     public SecurityFilterChain resourceServerFilterChains(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/oauth2/**").authenticated()
+                    .antMatchers(AUTH_WHITELIST).permitAll()
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
+                .and().logout()
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies()
                 .and()
                 .csrf().disable()
                 .cors().and()
