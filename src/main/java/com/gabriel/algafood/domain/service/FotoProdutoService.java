@@ -1,15 +1,15 @@
 package com.gabriel.algafood.domain.service;
 
+import com.gabriel.algafood.core.storage.StorageProperties;
 import com.gabriel.algafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.gabriel.algafood.domain.model.FotoProduto;
 import com.gabriel.algafood.domain.repository.ProdutoRepository;
+import com.gabriel.algafood.domain.service.FotoStorageService.NovaFoto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.gabriel.algafood.domain.service.FotoStorageService.NovaFoto;
 
 import java.io.InputStream;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +17,7 @@ public class FotoProdutoService {
 
     private ProdutoRepository produtoRepository;
     private FotoStorageService fotoStorageService;
+    private StorageProperties properties;
 
     @Transactional
     public FotoProduto salvar(FotoProduto foto, InputStream dadosArquivo) {
@@ -33,6 +34,7 @@ public class FotoProdutoService {
         }
 
         foto.setNomeArquivo(nomeNovoArquivo);
+        foto.setCaminho(gerarUrlArquivo(nomeNovoArquivo));
         foto = produtoRepository.save(foto);
         produtoRepository.flush();
 
@@ -50,7 +52,7 @@ public class FotoProdutoService {
 
 
     public FotoProduto buscarPorId(Long restauranteId, Long produtoId) {
-        return produtoRepository.findFotoById(produtoId, restauranteId).orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
+        return produtoRepository.findFotoById(restauranteId, produtoId).orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
     }
 
     @Transactional
@@ -61,6 +63,13 @@ public class FotoProdutoService {
         produtoRepository.flush();
 
         fotoStorageService.remover(fotoProduto.getNomeArquivo());
+    }
+
+    private String gerarUrlArquivo(String nomeArquivo) {
+
+        return properties.getTipo().equals(StorageProperties.TipoStorage.S3)
+                ? fotoStorageService.recuperar(nomeArquivo).getUrl()
+                : fotoStorageService.getArquivoPath(nomeArquivo);
     }
 
 }

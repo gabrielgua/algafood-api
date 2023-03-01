@@ -23,6 +23,7 @@ public class FotoProduto {
     private String descricao;
     private String contentType;
     private Long tamanho;
+    private String caminho;
 
     public Long getRestauranteId() {
         if (getProduto() != null) {

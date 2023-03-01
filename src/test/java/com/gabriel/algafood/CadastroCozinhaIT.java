@@ -19,6 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -171,7 +173,7 @@ class CadastroCozinhaIT {
 
     @Test
     public void deveFalhar_quandoRemoverCozinhaInexistente() {
-        Long cozinhasCadastradas = cozinhaService.listar().stream().count();
+        Long cozinhasCadastradas = cozinhaRepository.count();
 
         CozinhaNaoEncontradaException erroEsperado = Assertions.assertThrows(
                 CozinhaNaoEncontradaException.class, () -> {

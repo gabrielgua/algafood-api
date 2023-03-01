@@ -59,7 +59,6 @@ public class UsuarioService {
             throw new EntidadeEmUsoException("Usuário id: #"+id+" está em uso e não pode ser removido.");
         }
 
-
     }
 
     @Transactional

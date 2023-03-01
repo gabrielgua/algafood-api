@@ -20,4 +20,6 @@ public class FotoProdutoModel extends RepresentationModel<FotoProdutoModel> {
 
     @ApiModelProperty(example = "114170")
     private Long tamanho;
+
+    private String caminho;
 }

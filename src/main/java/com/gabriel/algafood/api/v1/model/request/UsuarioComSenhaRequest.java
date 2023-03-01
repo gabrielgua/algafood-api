@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class UsuarioComSenhaRequest extends UsuarioRequest{
+public class UsuarioComSenhaRequest extends UsuarioRequest {
 
     @ApiModelProperty(example = "123123")
     @NotBlank

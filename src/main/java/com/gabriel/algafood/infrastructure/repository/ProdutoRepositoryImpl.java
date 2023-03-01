@@ -20,9 +20,8 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
         return manager.merge(foto);
     }
 
-    @Transactional
-
     @Override
+    @Transactional
     public void delete(FotoProduto foto) {
         manager.remove(foto);
     }

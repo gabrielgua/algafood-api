@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class ResourceServerConfig {
 // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**", "/swagger-ui/**", "/actuator/**",
 // -- API
-            "/login", "/logout", "/oauth2/logout" };
+            "/login", "/logout", "/oauth2/logout", "/css/**" };
 
     @Bean
     public SecurityFilterChain resourceServerFilterChains(HttpSecurity http) throws Exception {
@@ -45,6 +46,18 @@ public class ResourceServerConfig {
                 .cors().and()
                 .oauth2ResourceServer().jwt()
                     .jwtAuthenticationConverter(jwtAuthenticationConverter());
+
+        http.logout(logoutConfig -> {
+            logoutConfig.logoutSuccessHandler((request, response, authentication) -> {
+                String returnTo = request.getParameter("returnTo");
+                if (!StringUtils.hasText(returnTo)) {
+                    returnTo = "http://127.0.0.1:8080";
+                }
+
+                response.setStatus(302);
+                response.sendRedirect(returnTo);
+            });
+        });
 
         http.formLogin(customizer -> customizer.loginPage("/login"));
 

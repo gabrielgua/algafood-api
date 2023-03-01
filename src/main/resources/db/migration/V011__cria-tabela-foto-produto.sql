@@ -4,6 +4,7 @@ create table foto_produto (
     descricao varchar(150) not null,
     content_type varchar(80) not null,
     tamanho int not null,
+    caminho varchar(150),
 
     primary key (produto_id),
     constraint fk_foto_produto_produto foreign key (produto_id) references produto (id)

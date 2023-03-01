@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.UUID;
 
 public interface FotoStorageService {
@@ -11,13 +12,16 @@ public interface FotoStorageService {
     void armazenar(NovaFoto novaFoto);
     void remover(String nomeArquivo);
 
+    String getArquivoPath(String nomeArquivo);
+
+
     FotoRecuperada recuperar(String nomeArquivo);
 
-    default void substituir(String nomeArquivoAntigo, NovaFoto novaFoto) {
+    default void substituir(String nomeArquivoExistente, NovaFoto novaFoto) {
         armazenar(novaFoto);
 
-        if (nomeArquivoAntigo != null) {
-            remover(nomeArquivoAntigo);
+        if (nomeArquivoExistente != null) {
+            remover(nomeArquivoExistente);
         }
     }
 

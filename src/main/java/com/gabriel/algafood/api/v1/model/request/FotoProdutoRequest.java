@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 public class FotoProdutoRequest {
 
     @NotNull
-    @FileSize(max = "10MB")
-    @FileContentType(allowed = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @FileSize(max = "50MB")
+//    @FileContentType(allowed = {MediaType.ALL_VALUE})
     private MultipartFile arquivo;
 
     @ApiModelProperty(example = "Prime rib mal passado")

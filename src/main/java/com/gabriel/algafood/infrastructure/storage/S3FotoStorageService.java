@@ -11,6 +11,7 @@ import com.gabriel.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
+import java.nio.file.Path;
 
 public class S3FotoStorageService implements FotoStorageService {
 
@@ -23,7 +24,7 @@ public class S3FotoStorageService implements FotoStorageService {
     @Override
     public void armazenar(NovaFoto novaFoto) {
         try {
-            String caminhoArquivo = getCaminhoArquivo(novaFoto.getNomeArquivo());
+            var caminhoArquivo = getArquivoPath(novaFoto.getNomeArquivo());
             var objectMetaData = new ObjectMetadata();
             objectMetaData.setContentType(novaFoto.getContentType());
 
@@ -45,7 +46,7 @@ public class S3FotoStorageService implements FotoStorageService {
     @Override
     public void remover(String nomeArquivo) {
         try {
-            var caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+            var caminhoArquivo = getArquivoPath(nomeArquivo);
             var deleteObjectRequest = new DeleteObjectRequest(
                     storageProperties.getS3().getBucket(),
                     caminhoArquivo
@@ -59,7 +60,7 @@ public class S3FotoStorageService implements FotoStorageService {
 
     @Override
     public FotoRecuperada recuperar(String nomeArquivo) {
-        var caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+        var caminhoArquivo = getArquivoPath(nomeArquivo);
         URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(), caminhoArquivo);
 
         return FotoRecuperada.builder()
@@ -67,7 +68,7 @@ public class S3FotoStorageService implements FotoStorageService {
                 .build();
     }
 
-    public String getCaminhoArquivo(String nomeArquivo) {
+    public String getArquivoPath(String nomeArquivo) {
         return String.format("%s/%s", storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
     }
 }

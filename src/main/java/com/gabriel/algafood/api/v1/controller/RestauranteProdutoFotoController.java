@@ -12,10 +12,7 @@ import com.gabriel.algafood.domain.service.FotoStorageService;
 import com.gabriel.algafood.domain.service.ProdutoService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +55,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
             if (fotoRecuperada.temUrl()) {
                 return ResponseEntity
                         .status(HttpStatus.FOUND)
-                        .header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+                        .header(HttpHeaders.LOCATION, fotoRecuperada.getUrl()).allow(HttpMethod.GET)
                         .build();
             } else {
                 return ResponseEntity.ok()
