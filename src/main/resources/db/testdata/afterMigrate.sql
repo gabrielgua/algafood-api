@@ -1,5 +1,10 @@
 set foreign_key_checks = 0;
 
+lock tables cidade write, cozinha write, estado write, forma_pagamento write, grupo write, grupo_permissao write,
+    permissao write, produto write, restaurante write, restaurante_forma_pagamento write, restaurante_usuario_responsavel write,
+    usuario write, usuario_grupo write, pedido write, item_pedido write, foto_produto write,
+    oauth2_registered_client write, oauth2_authorization write, oauth2_authorization_consent write;
+
 delete from cidade;
 delete from cozinha;
 delete from estado;
@@ -172,6 +177,7 @@ values
 ('2','algafood-web','2022-12-15 02:14:48','$2a$10$OXK/PljUm5XpP8eVRZzo6OtKIAQ2B7YR4fJqoQRzPwj6mqSHO8rp2',NULL,'AlgaFood Web','client_secret_basic','refresh_token,authorization_code','http://127.0.0.1:4200/authorized','READ,WRITE','{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.client.require-proof-key\":false,\"settings.client.require-authorization-consent\":true}','{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.token.reuse-refresh-tokens\":false,\"settings.token.id-token-signature-algorithm\":[\"org.springframework.security.oauth2.jose.jws.SignatureAlgorithm\",\"RS256\"],\"settings.token.access-token-time-to-live\":[\"java.time.Duration\",900.000000000],\"settings.token.access-token-format\":{\"@class\":\"org.springframework.security.oauth2.core.OAuth2TokenFormat\",\"value\":\"self-contained\"},\"settings.token.refresh-token-time-to-live\":[\"java.time.Duration\",86400.000000000]}'),
 ('3','foodanalytics','2022-12-15 02:14:48','$2a$10$X5FQG7gQOuNAk3a4AMpJ8OPWTUDje5xgLK870.7i88rrp2VpJ6Vc2',NULL,'FoodAnalytics','client_secret_basic','authorization_code','http://127.0.0.1:8000','READ,WRITE','{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.client.require-proof-key\":false,\"settings.client.require-authorization-consent\":false}','{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.token.reuse-refresh-tokens\":true,\"settings.token.id-token-signature-algorithm\":[\"org.springframework.security.oauth2.jose.jws.SignatureAlgorithm\",\"RS256\"],\"settings.token.access-token-time-to-live\":[\"java.time.Duration\",900.000000000],\"settings.token.access-token-format\":{\"@class\":\"org.springframework.security.oauth2.core.OAuth2TokenFormat\",\"value\":\"self-contained\"},\"settings.token.refresh-token-time-to-live\":[\"java.time.Duration\",3600.000000000]}');
 
+unlock tables;
 
 
 

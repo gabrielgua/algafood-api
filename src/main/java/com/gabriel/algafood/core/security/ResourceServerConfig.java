@@ -29,7 +29,7 @@ public class ResourceServerConfig {
 // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**", "/swagger-ui/**", "/actuator/**",
 // -- API
-            "/login", "/logout", "/oauth2/logout", "/css/**" };
+            "/login", "/logout", "/oauth2/logout", "/css/**", "/hostcheck" };
 
     @Bean
     public SecurityFilterChain resourceServerFilterChains(HttpSecurity http) throws Exception {
